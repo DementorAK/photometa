@@ -1,0 +1,21 @@
+# Default behavior: normalize newline characters
+* text=auto
+
+# Source code files
+*.go text
+*.mod text
+*.sum text
+*.md text
+*.json text
+*.html text
+# Binary files (don't normalize)
+*.svg -text
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.gif -text
+*.webp -text
+*.ico -text
+docs/img/*.jpg filter=lfs diff=lfs merge=lfs -text
+docs/img/*.png filter=lfs diff=lfs merge=lfs -text
+docs/img/*.tif filter=lfs diff=lfs merge=lfs -text

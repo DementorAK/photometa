@@ -1,0 +1,162 @@
+[
+    {
+        "id": "creator",
+        "name": "Creator"
+    },
+    {
+        "id": "rights",
+        "name": "Rights"
+    },
+    {
+        "id": "title",
+        "name": "Title"
+    },
+    {
+        "id": "description",
+        "name": "Description"
+    },
+    {
+        "id": "subject",
+        "name": "Subject"
+    },
+    {
+        "id": "CreateDate",
+        "name": "CreateDate"
+    },
+    {
+        "id": "ModifyDate",
+        "name": "ModifyDate"
+    },
+    {
+        "id": "CreatorTool",
+        "name": "CreatorTool"
+    },
+    {
+        "id": "Publisher",
+        "name": "Publisher"
+    },
+    {
+        "id": "Rating",
+        "name": "Rating"
+    },
+    {
+        "id": "Label",
+        "name": "Label"
+    },
+    {
+        "id": "format",
+        "name": "Format"
+    },
+    {
+        "id": "identifier",
+        "name": "Identifier"
+    },
+    {
+        "id": "MetadataDate",
+        "name": "MetadataDate"
+    },
+    {
+        "id": "DerivedFrom",
+        "name": "DerivedFrom"
+    },
+    {
+        "id": "DocumentID",
+        "name": "DocumentID"
+    },
+    {
+        "id": "InstanceID",
+        "name": "InstanceID"
+    },
+    {
+        "id": "OriginalDocumentID",
+        "name": "OriginalDocumentID"
+    },
+    {
+        "id": "ColorMode",
+        "name": "ColorMode"
+    },
+    {
+        "id": "ICCProfile",
+        "name": "ICCProfile"
+    },
+    {
+        "id": "LensModel",
+        "name": "LensModel"
+    },
+    {
+        "id": "Lens",
+        "name": "Lens"
+    },
+    {
+        "id": "LensID",
+        "name": "LensID"
+    },
+    {
+        "id": "SerialNumber",
+        "name": "SerialNumber"
+    },
+    {
+        "id": "DateTimeOriginal",
+        "name": "DateTimeOriginal"
+    },
+    {
+        "id": "DateTimeDigitized",
+        "name": "DateTimeDigitized"
+    },
+    {
+        "id": "FlashCompensation",
+        "name": "FlashCompensation"
+    },
+    {
+        "id": "ColorSpace",
+        "name": "ColorSpace"
+    },
+    {
+        "id": "WhiteBalance",
+        "name": "WhiteBalance"
+    },
+    {
+        "id": "SceneType",
+        "name": "SceneType"
+    },
+    {
+        "id": "SceneCaptureType",
+        "name": "SceneCaptureType"
+    },
+    {
+        "id": "ExposureMode",
+        "name": "ExposureMode"
+    },
+    {
+        "id": "FocalLength",
+        "name": "FocalLength"
+    },
+    {
+        "id": "FocalLengthIn35mmFilm",
+        "name": "FocalLengthIn35mmFilm"
+    },
+    {
+        "id": "FNumber",
+        "name": "FNumber"
+    },
+    {
+        "id": "ExposureTime",
+        "name": "ExposureTime"
+    },
+    {
+        "id": "ISOSpeedRatings",
+        "name": "ISOSpeedRatings"
+    },
+    {
+        "id": "Flash",
+        "name": "Flash"
+    },
+    {
+        "id": "Make",
+        "name": "Make"
+    },
+    {
+        "id": "Model",
+        "name": "Model"
+    }
+]

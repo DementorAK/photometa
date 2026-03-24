@@ -1,0 +1,46 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch GUI",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/photometa",
+            "args": [
+                "gui"
+            ],
+            "buildFlags": "-tags=gui"
+        },
+        {
+            "name": "Launch WEB",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/photometa",
+            "args": [
+                "server"
+            ]
+        },
+        {
+            "name": "Launch CLI (current file)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/photometa",
+            "args": [
+                "${file}"
+            ]
+        },
+        {
+            "name": "Launch CLI (current dir)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/photometa",
+            "args": [
+                "."
+            ]
+        }
+    ]
+}

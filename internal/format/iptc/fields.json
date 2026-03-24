@@ -1,0 +1,337 @@
+[
+    {
+        "record": 1,
+        "dataset": 0,
+        "name": "EnvelopeRecordVersion"
+    },
+    {
+        "record": 1,
+        "dataset": 5,
+        "name": "Destination"
+    },
+    {
+        "record": 1,
+        "dataset": 20,
+        "name": "FileFormat"
+    },
+    {
+        "record": 1,
+        "dataset": 22,
+        "name": "FileVersion"
+    },
+    {
+        "record": 1,
+        "dataset": 30,
+        "name": "ServiceIdentifier"
+    },
+    {
+        "record": 1,
+        "dataset": 40,
+        "name": "EnvelopeNumber"
+    },
+    {
+        "record": 1,
+        "dataset": 50,
+        "name": "ProductID"
+    },
+    {
+        "record": 1,
+        "dataset": 60,
+        "name": "EnvelopePriority"
+    },
+    {
+        "record": 1,
+        "dataset": 70,
+        "name": "DateSent"
+    },
+    {
+        "record": 1,
+        "dataset": 80,
+        "name": "TimeSent"
+    },
+    {
+        "record": 1,
+        "dataset": 90,
+        "name": "CodedCharacterSet"
+    },
+    {
+        "record": 1,
+        "dataset": 100,
+        "name": "UniqueObjectName"
+    },
+    {
+        "record": 1,
+        "dataset": 120,
+        "name": "ARMIdentifier"
+    },
+    {
+        "record": 1,
+        "dataset": 122,
+        "name": "ARMVersion"
+    },
+    {
+        "record": 2,
+        "dataset": 0,
+        "name": "ApplicationRecordVersion"
+    },
+    {
+        "record": 2,
+        "dataset": 3,
+        "name": "ObjectTypeReference"
+    },
+    {
+        "record": 2,
+        "dataset": 4,
+        "name": "ObjectAttributeReference"
+    },
+    {
+        "record": 2,
+        "dataset": 5,
+        "name": "ObjectName"
+    },
+    {
+        "record": 2,
+        "dataset": 7,
+        "name": "EditStatus"
+    },
+    {
+        "record": 2,
+        "dataset": 8,
+        "name": "EditorialUpdate"
+    },
+    {
+        "record": 2,
+        "dataset": 10,
+        "name": "Urgency"
+    },
+    {
+        "record": 2,
+        "dataset": 12,
+        "name": "SubjectReference"
+    },
+    {
+        "record": 2,
+        "dataset": 15,
+        "name": "Category"
+    },
+    {
+        "record": 2,
+        "dataset": 20,
+        "name": "SupplementalCategories"
+    },
+    {
+        "record": 2,
+        "dataset": 22,
+        "name": "FixtureIdentifier"
+    },
+    {
+        "record": 2,
+        "dataset": 25,
+        "name": "Keywords"
+    },
+    {
+        "record": 2,
+        "dataset": 26,
+        "name": "ContentLocationCode"
+    },
+    {
+        "record": 2,
+        "dataset": 27,
+        "name": "ContentLocationName"
+    },
+    {
+        "record": 2,
+        "dataset": 30,
+        "name": "ReleaseDate"
+    },
+    {
+        "record": 2,
+        "dataset": 35,
+        "name": "ReleaseTime"
+    },
+    {
+        "record": 2,
+        "dataset": 37,
+        "name": "ExpirationDate"
+    },
+    {
+        "record": 2,
+        "dataset": 38,
+        "name": "ExpirationTime"
+    },
+    {
+        "record": 2,
+        "dataset": 40,
+        "name": "SpecialInstructions"
+    },
+    {
+        "record": 2,
+        "dataset": 42,
+        "name": "ActionAdvised"
+    },
+    {
+        "record": 2,
+        "dataset": 45,
+        "name": "ReferenceService"
+    },
+    {
+        "record": 2,
+        "dataset": 47,
+        "name": "ReferenceDate"
+    },
+    {
+        "record": 2,
+        "dataset": 50,
+        "name": "ReferenceNumber"
+    },
+    {
+        "record": 2,
+        "dataset": 55,
+        "name": "DateCreated"
+    },
+    {
+        "record": 2,
+        "dataset": 60,
+        "name": "TimeCreated"
+    },
+    {
+        "record": 2,
+        "dataset": 62,
+        "name": "DigitalCreationDate"
+    },
+    {
+        "record": 2,
+        "dataset": 63,
+        "name": "DigitalCreationTime"
+    },
+    {
+        "record": 2,
+        "dataset": 65,
+        "name": "OriginatingProgram"
+    },
+    {
+        "record": 2,
+        "dataset": 70,
+        "name": "ProgramVersion"
+    },
+    {
+        "record": 2,
+        "dataset": 75,
+        "name": "ObjectCycle"
+    },
+    {
+        "record": 2,
+        "dataset": 80,
+        "name": "By-line"
+    },
+    {
+        "record": 2,
+        "dataset": 85,
+        "name": "By-lineTitle"
+    },
+    {
+        "record": 2,
+        "dataset": 90,
+        "name": "City"
+    },
+    {
+        "record": 2,
+        "dataset": 92,
+        "name": "Sub-location"
+    },
+    {
+        "record": 2,
+        "dataset": 95,
+        "name": "Province-State"
+    },
+    {
+        "record": 2,
+        "dataset": 100,
+        "name": "Country-PrimaryLocationCode"
+    },
+    {
+        "record": 2,
+        "dataset": 101,
+        "name": "Country-PrimaryLocationName"
+    },
+    {
+        "record": 2,
+        "dataset": 103,
+        "name": "OriginalTransmissionReference"
+    },
+    {
+        "record": 2,
+        "dataset": 105,
+        "name": "Headline"
+    },
+    {
+        "record": 2,
+        "dataset": 110,
+        "name": "Credit"
+    },
+    {
+        "record": 2,
+        "dataset": 115,
+        "name": "Source"
+    },
+    {
+        "record": 2,
+        "dataset": 116,
+        "name": "CopyrightNotice"
+    },
+    {
+        "record": 2,
+        "dataset": 118,
+        "name": "Contact"
+    },
+    {
+        "record": 2,
+        "dataset": 120,
+        "name": "Caption-Abstract"
+    },
+    {
+        "record": 2,
+        "dataset": 121,
+        "name": "LocalCaption"
+    },
+    {
+        "record": 2,
+        "dataset": 122,
+        "name": "Writer-Editor"
+    },
+    {
+        "record": 2,
+        "dataset": 130,
+        "name": "ImageType"
+    },
+    {
+        "record": 2,
+        "dataset": 131,
+        "name": "ImageOrientation"
+    },
+    {
+        "record": 2,
+        "dataset": 135,
+        "name": "LanguageIdentifier"
+    },
+    {
+        "record": 2,
+        "dataset": 200,
+        "name": "ObjectPreviewFileFormat"
+    },
+    {
+        "record": 2,
+        "dataset": 201,
+        "name": "ObjectPreviewFileVersion"
+    },
+    {
+        "record": 2,
+        "dataset": 202,
+        "name": "ObjectPreviewData"
+    },
+    {
+        "record": 2,
+        "dataset": 255,
+        "name": "CatalogSets"
+    }
+]

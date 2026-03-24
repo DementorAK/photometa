@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotoMeta Demo</title>
+    <style>
+        :root {
+            --bg-color: #1E1E1E;
+            --card-bg: #2A2A2A;
+            --text-color: #EEEEEE;
+            --accent-color: #2F786F;
+            --border-color: #424242;
+            --hover-color: #363636;
+            --error-color: #cf6679;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            transition: all 0.3s ease;
+        }
+
+        /* Home State */
+        .home-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .drop-zone {
+            width: 100%;
+            height: 300px;
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: var(--card-bg);
+            transition: border-color 0.3s, background-color 0.3s;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.drag-over {
+            border-color: var(--accent-color);
+            background-color: var(--hover-color);
+        }
+
+        .drop-zone svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--accent-color);
+            margin-bottom: 16px;
+        }
+
+        .drop-zone p {
+            font-size: 1.1rem;
+            color: #aaa;
+        }
+
+        /* Results State */
+        .results-view {
+            display: none;
+            flex-direction: column;
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-bg);
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            position: sticky;
+            top: 70px;
+            z-index: 10;
+        }
+
+        .top-bar input[type="file"] {
+            display: none;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        th,
+        td {
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #252525;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-color);
+        }
+
+        .prop-name {
+            font-weight: 500;
+            color: #bbb;
+        }
+
+        .icon-col {
+            width: 40px;
+            text-align: center;
+        }
+
+        .type-col {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .loading {
+            display: none;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        #error-msg, .error {
+            color: var(--error-color);
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+            background: rgba(207, 102, 121, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--error-color);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 2000;
+            pointer-events: none;
+            padding-top: 20px;
+        }
+
+        .sticky-header .container {
+            display: flex;
+            justify-content: flex-end;
+            margin: 0 auto;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        .lang-switcher {
+            pointer-events: auto;
+        }
+
+        #lang-select {
+            background: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        #lang-select option {
+            background: var(--card-bg);
+            color: var(--accent-color);
+        }
+
+        .group-separator td {
+            border-top: 4px double var(--accent-color) !important;
+            padding-top: 20px !important;
+        }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            vertical-align: middle;
+            margin-right: 8px;
+            filter: brightness(0.8) sepia(1) hue-rotate(120deg) saturate(2); /* Make it match accent color roughly */
+        }
+        
+        #file-name-display {
+            display: flex;
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .drop-zone {
+                height: 200px;
+            }
+
+            .prop-name {
+                width: 40%;
+            }
+
+            .sticky-header {
+                padding-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sticky-header">
+        <div class="container">
+            <div class="lang-switcher">
+                <select id="lang-select">
+                    <!-- Locales injected here -->
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="main-container">
+        <!-- Home View -->
+        <div class="home-view" id="home-view">
+            <h1>PhotoMeta</h1>
+            <div class="drop-zone" id="drop-zone">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                <p>Drop your photo here or click to browse</p>
+                <input type="file" id="file-input" style="display:none" accept="image/*">
+            </div>
+            <div id="home-loading" class="loading">Analyzing...</div>
+            <div id="home-error" class="error"></div>
+        </div>
+
+        <!-- Results View -->
+        <div class="results-view" id="results-view">
+            <div class="top-bar">
+                <span id="file-name-display" style="font-weight: 600;"></span>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="btn btn-secondary" onclick="document.getElementById('file-input-top').click()">New
+                        Analysis</button>
+                    <input type="file" id="file-input-top" accept="image/*" onchange="handleFile(this.files[0])">
+                </div>
+            </div>
+            <div id="results-loading" class="loading">Updating...</div>
+            <table id="metadata-table">
+                <thead>
+                    <tr>
+                        <th class="icon-col"></th>
+                        <th>Type</th>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody id="metadata-body">
+                    <!-- Rows injected here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const homeView = document.getElementById('home-view');
+        const resultsView = document.getElementById('results-view');
+        const metadataBody = document.getElementById('metadata-body');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const langSelect = document.getElementById('lang-select');
+
+        // Load locales
+        async function loadLocales() {
+            try {
+                const response = await fetch('/locales');
+                if (response.ok) {
+                    const locales = await response.json();
+                    langSelect.innerHTML = locales.map(l => `<option value="${l.code}">${l.description}</option>`).join('');
+                    langSelect.value = 'en';
+                }
+            } catch (err) {
+                console.error("Failed to load locales", err);
+            }
+        }
+        loadLocales();
+
+        // Drag & Drop events
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) handleFile(file);
+        });
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) handleFile(e.target.files[0]);
+        });
+
+        async function handleFile(file) {
+            if (!file) return;
+
+            showLoading(true);
+            document.getElementById('home-error').textContent = '';
+            document.getElementById('home-error').style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('lang', langSelect.value || 'en');
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(`Server returned ${response.status}: ${text}`);
+                }
+
+                const data = await response.json();
+                renderResults(file.name, data);
+            } catch (err) {
+                const errorMsg = `Error: ${err.message}`;
+                document.getElementById('home-error').textContent = errorMsg;
+                document.getElementById('home-error').style.display = 'block';
+                console.error("handleFile error:", err);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function showLoading(show) {
+            document.getElementById('home-loading').style.display = show ? 'block' : 'none';
+            document.getElementById('results-loading').style.display = show ? 'block' : 'none';
+        }
+
+        function renderResults(fileName, data) {
+            console.log("Analysis results:", data);
+            homeView.style.display = 'none';
+            resultsView.style.display = 'flex';
+            const groupToIcon = {
+                'File': 'group_file',
+                'Author': 'group_author',
+                'Location': 'group_location',
+                'Equipment': 'group_equipment',
+                'Photo': 'group_photo',
+                'Shooting': 'group_shooting'
+            };
+
+            const formatIcon = data.format ? `format_${data.format}` : 'format_unknown';
+            fileNameDisplay.innerHTML = `<img src="/icons/${formatIcon}.svg" class="icon"> <span>File: ${fileName}</span>`;
+            metadataBody.innerHTML = '';
+
+            if (!data.metadata || !Array.isArray(data.metadata)) return;
+
+            // Group by 'raw_group'
+            const groups = {};
+            data.metadata.forEach(prop => {
+                if (!groups[prop.raw_group]) groups[prop.raw_group] = [];
+                groups[prop.raw_group].push(prop);
+            });
+
+            // Sort everything by synonym within groups
+            Object.keys(groups).forEach(g => {
+                groups[g].sort((a, b) => a.synonym.localeCompare(b.synonym));
+            });
+
+            // Render groups in specific order
+            const order = ['File', 'Author', 'Location', 'Equipment', 'Photo', 'Shooting'];
+            const allGroups = Object.keys(groups);
+            const groupNames = [];
+
+            // 1. Add known groups in order
+            order.forEach(g => {
+                if (groups[g]) groupNames.push(g);
+            });
+
+            // 2. Add other groups (not in 'order' list and not 'Other')
+            allGroups.forEach(g => {
+                const rawG = groups[g][0].raw_group;
+                if (!order.includes(rawG) && rawG !== 'Other' && !groupNames.includes(g)) groupNames.push(g);
+            });
+
+            // 3. Add 'Other' at the end
+            const otherGroupName = allGroups.find(g => groups[g][0].raw_group === 'Other');
+            if (otherGroupName && !groupNames.includes(otherGroupName)) groupNames.push(otherGroupName);
+
+            groupNames.forEach((g, index) => {
+                groups[g].forEach((prop, propIndex) => {
+                    const row = document.createElement('tr');
+                    
+                    // Add group header row
+                    if (propIndex === 0) {
+                        const headerRow = document.createElement('tr');
+                        headerRow.className = 'group-separator';
+                        const iconName = groupToIcon[prop.raw_group] || 'group_other';
+                        headerRow.innerHTML = `
+                            <td colspan="4" style="background: #252525; padding: 10px 20px; color: var(--accent-color); font-weight: bold; border-top: 2px solid var(--accent-color);">
+                                <img src="/icons/${iconName}.svg" class="icon"> ${prop.group}
+                            </td>`;
+                        metadataBody.appendChild(headerRow);
+                    }
+                    
+                    row.innerHTML = `
+                        <td class="icon-col"></td>
+                        <td class="type-col">${prop.type}</td>
+                        <td class="prop-name">${prop.synonym}</td>
+                        <td>${prop.value}</td>`;
+                    metadataBody.appendChild(row);
+                });
+            });
+        }
+
+        function formatSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+
+</html>

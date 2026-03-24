@@ -1,0 +1,734 @@
+[
+  {
+    "id": "0x0001",
+    "name": "InteropIndex"
+  },
+  {
+    "id": "0x0002",
+    "name": "InteropVersion"
+  },
+  {
+    "id": "0x000B",
+    "name": "ProcessingSoftware"
+  },
+  {
+    "id": "0x00FE",
+    "name": "SubfileType"
+  },
+  {
+    "id": "0x00FF",
+    "name": "OldSubfileType"
+  },
+  {
+    "id": "0x0100",
+    "name": "ImageWidth"
+  },
+  {
+    "id": "0x0101",
+    "name": "ImageHeight"
+  },
+  {
+    "id": "0x0102",
+    "name": "BitsPerSample"
+  },
+  {
+    "id": "0x0103",
+    "name": "Compression"
+  },
+  {
+    "id": "0x0106",
+    "name": "PhotometricInterpretation"
+  },
+  {
+    "id": "0x0107",
+    "name": "Thresholding"
+  },
+  {
+    "id": "0x0108",
+    "name": "CellWidth"
+  },
+  {
+    "id": "0x0109",
+    "name": "CellLength"
+  },
+  {
+    "id": "0x010A",
+    "name": "FillOrder"
+  },
+  {
+    "id": "0x010D",
+    "name": "DocumentName"
+  },
+  {
+    "id": "0x010E",
+    "name": "ImageDescription"
+  },
+  {
+    "id": "0x010F",
+    "name": "Make"
+  },
+  {
+    "id": "0x0110",
+    "name": "Model"
+  },
+  {
+    "id": "0x0111",
+    "name": "StripOffsets"
+  },
+  {
+    "id": "0x0112",
+    "name": "Orientation"
+  },
+  {
+    "id": "0x0115",
+    "name": "SamplesPerPixel"
+  },
+  {
+    "id": "0x0116",
+    "name": "RowsPerStrip"
+  },
+  {
+    "id": "0x0117",
+    "name": "StripByteCounts"
+  },
+  {
+    "id": "0x0118",
+    "name": "MinSampleValue"
+  },
+  {
+    "id": "0x0119",
+    "name": "MaxSampleValue"
+  },
+  {
+    "id": "0x011A",
+    "name": "XResolution"
+  },
+  {
+    "id": "0x011B",
+    "name": "YResolution"
+  },
+  {
+    "id": "0x011C",
+    "name": "PlanarConfiguration"
+  },
+  {
+    "id": "0x011D",
+    "name": "PageName"
+  },
+  {
+    "id": "0x011E",
+    "name": "XPosition"
+  },
+  {
+    "id": "0x011F",
+    "name": "YPosition"
+  },
+  {
+    "id": "0x0120",
+    "name": "FreeOffsets"
+  },
+  {
+    "id": "0x0121",
+    "name": "FreeByteCounts"
+  },
+  {
+    "id": "0x0122",
+    "name": "GrayResponseUnit"
+  },
+  {
+    "id": "0x0123",
+    "name": "GrayResponseCurve"
+  },
+  {
+    "id": "0x0124",
+    "name": "T4Options"
+  },
+  {
+    "id": "0x0125",
+    "name": "T6Options"
+  },
+  {
+    "id": "0x0128",
+    "name": "ResolutionUnit"
+  },
+  {
+    "id": "0x0129",
+    "name": "PageNumber"
+  },
+  {
+    "id": "0x012C",
+    "name": "ColorResponseUnit"
+  },
+  {
+    "id": "0x012D",
+    "name": "TransferFunction"
+  },
+  {
+    "id": "0x0131",
+    "name": "Software"
+  },
+  {
+    "id": "0x0132",
+    "name": "ModifyDate"
+  },
+  {
+    "id": "0x013B",
+    "name": "Artist"
+  },
+  {
+    "id": "0x013C",
+    "name": "HostComputer"
+  },
+  {
+    "id": "0x013D",
+    "name": "Predictor"
+  },
+  {
+    "id": "0x013E",
+    "name": "WhitePoint"
+  },
+  {
+    "id": "0x013F",
+    "name": "PrimaryChromaticities"
+  },
+  {
+    "id": "0x0140",
+    "name": "ColorMap"
+  },
+  {
+    "id": "0x0141",
+    "name": "HalftoneHints"
+  },
+  {
+    "id": "0x0142",
+    "name": "TileWidth"
+  },
+  {
+    "id": "0x0143",
+    "name": "TileLength"
+  },
+  {
+    "id": "0x0144",
+    "name": "TileOffsets"
+  },
+  {
+    "id": "0x0145",
+    "name": "TileByteCounts"
+  },
+  {
+    "id": "0x014A",
+    "name": "SubIFD"
+  },
+  {
+    "id": "0x014C",
+    "name": "InkSet"
+  },
+  {
+    "id": "0x014D",
+    "name": "InkNames"
+  },
+  {
+    "id": "0x014E",
+    "name": "NumberofInks"
+  },
+  {
+    "id": "0x0150",
+    "name": "DotRange"
+  },
+  {
+    "id": "0x0151",
+    "name": "TargetPrinter"
+  },
+  {
+    "id": "0x0152",
+    "name": "ExtraSamples"
+  },
+  {
+    "id": "0x0153",
+    "name": "SampleFormat"
+  },
+  {
+    "id": "0x0154",
+    "name": "SMinSampleValue"
+  },
+  {
+    "id": "0x0155",
+    "name": "SMaxSampleValue"
+  },
+  {
+    "id": "0x0156",
+    "name": "TransferRange"
+  },
+  {
+    "id": "0x0157",
+    "name": "ClipPath"
+  },
+  {
+    "id": "0x0200",
+    "name": "JPEGProc"
+  },
+  {
+    "id": "0x0201",
+    "name": "ThumbnailOffset"
+  },
+  {
+    "id": "0x0202",
+    "name": "ThumbnailLength"
+  },
+  {
+    "id": "0x0203",
+    "name": "JPEGRestartInterval"
+  },
+  {
+    "id": "0x0205",
+    "name": "JPEGLosslessPredictors"
+  },
+  {
+    "id": "0x0206",
+    "name": "JPEGPointTransforms"
+  },
+  {
+    "id": "0x0207",
+    "name": "JPEGQTables"
+  },
+  {
+    "id": "0x0208",
+    "name": "JPEGDCTables"
+  },
+  {
+    "id": "0x0209",
+    "name": "JPEGACTables"
+  },
+  {
+    "id": "0x0211",
+    "name": "YCbCrCoefficients"
+  },
+  {
+    "id": "0x0212",
+    "name": "YCbCrSubSampling"
+  },
+  {
+    "id": "0x0213",
+    "name": "YCbCrPositioning"
+  },
+  {
+    "id": "0x0214",
+    "name": "ReferenceBlackWhite"
+  },
+  {
+    "id": "0x02BC",
+    "name": "ApplicationNotes"
+  },
+  {
+    "id": "0x0303",
+    "name": "RenderingIntent"
+  },
+  {
+    "id": "0x1000",
+    "name": "RelatedImageFileFormat"
+  },
+  {
+    "id": "0x1001",
+    "name": "RelatedImageWidth"
+  },
+  {
+    "id": "0x1002",
+    "name": "RelatedImageHeight"
+  },
+  {
+    "id": "0x4746",
+    "name": "Rating"
+  },
+  {
+    "id": "0x4749",
+    "name": "RatingPercent"
+  },
+  {
+    "id": "0x800D",
+    "name": "ImageID"
+  },
+  {
+    "id": "0x8298",
+    "name": "Copyright"
+  },
+  {
+    "id": "0x829A",
+    "name": "ExposureTime"
+  },
+  {
+    "id": "0x829D",
+    "name": "FNumber"
+  },
+  {
+    "id": "0x83BB",
+    "name": "IPTC-NAA"
+  },
+  {
+    "id": "0x8649",
+    "name": "PhotoshopSettings"
+  },
+  {
+    "id": "0x8769",
+    "name": "ExifOffset"
+  },
+  {
+    "id": "0x8773",
+    "name": "ICC_Profile"
+  },
+  {
+    "id": "0x8822",
+    "name": "ExposureProgram"
+  },
+  {
+    "id": "0x8824",
+    "name": "SpectralSensitivity"
+  },
+  {
+    "id": "0x8825",
+    "name": "GPSInfo"
+  },
+  {
+    "id": "0x8827",
+    "name": "ISO"
+  },
+  {
+    "id": "0x8830",
+    "name": "SensitivityType"
+  },
+  {
+    "id": "0x8831",
+    "name": "StandardOutputSensitivity"
+  },
+  {
+    "id": "0x8832",
+    "name": "RecommendedExposureIndex"
+  },
+  {
+    "id": "0x8833",
+    "name": "ISOSpeed"
+  },
+  {
+    "id": "0x9000",
+    "name": "ExifVersion"
+  },
+  {
+    "id": "0x9003",
+    "name": "DateTimeOriginal"
+  },
+  {
+    "id": "0x9004",
+    "name": "CreateDate"
+  },
+  {
+    "id": "0x9010",
+    "name": "OffsetTime"
+  },
+  {
+    "id": "0x9011",
+    "name": "OffsetTimeOriginal"
+  },
+  {
+    "id": "0x9012",
+    "name": "OffsetTimeDigitized"
+  },
+  {
+    "id": "0x9101",
+    "name": "ComponentsConfiguration"
+  },
+  {
+    "id": "0x9102",
+    "name": "CompressedBitsPerPixel"
+  },
+  {
+    "id": "0x9201",
+    "name": "ShutterSpeedValue"
+  },
+  {
+    "id": "0x9202",
+    "name": "ApertureValue"
+  },
+  {
+    "id": "0x9203",
+    "name": "BrightnessValue"
+  },
+  {
+    "id": "0x9204",
+    "name": "ExposureCompensation"
+  },
+  {
+    "id": "0x9205",
+    "name": "MaxApertureValue"
+  },
+  {
+    "id": "0x9206",
+    "name": "SubjectDistance"
+  },
+  {
+    "id": "0x9207",
+    "name": "MeteringMode"
+  },
+  {
+    "id": "0x9208",
+    "name": "LightSource"
+  },
+  {
+    "id": "0x9209",
+    "name": "Flash"
+  },
+  {
+    "id": "0x920A",
+    "name": "FocalLength"
+  },
+  {
+    "id": "0x9214",
+    "name": "SubjectArea"
+  },
+  {
+    "id": "0x927C",
+    "name": "MakerNote"
+  },
+  {
+    "id": "0x9286",
+    "name": "UserComment"
+  },
+  {
+    "id": "0x9290",
+    "name": "SubSecTime"
+  },
+  {
+    "id": "0x9291",
+    "name": "SubSecTimeOriginal"
+  },
+  {
+    "id": "0x9292",
+    "name": "SubSecTimeDigitized"
+  },
+  {
+    "id": "0x9400",
+    "name": "AmbientTemperature"
+  },
+  {
+    "id": "0x9401",
+    "name": "Humidity"
+  },
+  {
+    "id": "0x9402",
+    "name": "Pressure"
+  },
+  {
+    "id": "0x9403",
+    "name": "WaterDepth"
+  },
+  {
+    "id": "0x9404",
+    "name": "Acceleration"
+  },
+  {
+    "id": "0x9405",
+    "name": "CameraElevationAngle"
+  },
+  {
+    "id": "0x9C9B",
+    "name": "XPTitle"
+  },
+  {
+    "id": "0x9C9C",
+    "name": "XPComment"
+  },
+  {
+    "id": "0x9C9D",
+    "name": "XPAuthor"
+  },
+  {
+    "id": "0x9C9E",
+    "name": "XPKeywords"
+  },
+  {
+    "id": "0x9C9F",
+    "name": "XPSubject"
+  },
+  {
+    "id": "0xA000",
+    "name": "FlashpixVersion"
+  },
+  {
+    "id": "0xA001",
+    "name": "ColorSpace"
+  },
+  {
+    "id": "0xA002",
+    "name": "ExifImageWidth"
+  },
+  {
+    "id": "0xA003",
+    "name": "ExifImageHeight"
+  },
+  {
+    "id": "0xA004",
+    "name": "RelatedSoundFile"
+  },
+  {
+    "id": "0xA005",
+    "name": "InteropOffset"
+  },
+  {
+    "id": "0xA20B",
+    "name": "FlashEnergy"
+  },
+  {
+    "id": "0xA20E",
+    "name": "FocalPlaneXResolution"
+  },
+  {
+    "id": "0xA20F",
+    "name": "FocalPlaneYResolution"
+  },
+  {
+    "id": "0xA210",
+    "name": "FocalPlaneResolutionUnit"
+  },
+  {
+    "id": "0xA214",
+    "name": "SubjectLocation"
+  },
+  {
+    "id": "0xA215",
+    "name": "ExposureIndex"
+  },
+  {
+    "id": "0xA217",
+    "name": "SensingMethod"
+  },
+  {
+    "id": "0xA300",
+    "name": "FileSource"
+  },
+  {
+    "id": "0xA301",
+    "name": "SceneType"
+  },
+  {
+    "id": "0xA302",
+    "name": "CFAPattern"
+  },
+  {
+    "id": "0xA401",
+    "name": "CustomRendered"
+  },
+  {
+    "id": "0xA402",
+    "name": "ExposureMode"
+  },
+  {
+    "id": "0xA403",
+    "name": "WhiteBalance"
+  },
+  {
+    "id": "0xA404",
+    "name": "DigitalZoomRatio"
+  },
+  {
+    "id": "0xA405",
+    "name": "FocalLengthIn35mmFormat"
+  },
+  {
+    "id": "0xA406",
+    "name": "SceneCaptureType"
+  },
+  {
+    "id": "0xA407",
+    "name": "GainControl"
+  },
+  {
+    "id": "0xA408",
+    "name": "Contrast"
+  },
+  {
+    "id": "0xA409",
+    "name": "Saturation"
+  },
+  {
+    "id": "0xA40A",
+    "name": "Sharpness"
+  },
+  {
+    "id": "0xA40B",
+    "name": "DeviceSettingDescription"
+  },
+  {
+    "id": "0xA40C",
+    "name": "SubjectDistanceRange"
+  },
+  {
+    "id": "0xA420",
+    "name": "ImageUniqueID"
+  },
+  {
+    "id": "0xA430",
+    "name": "OwnerName"
+  },
+  {
+    "id": "0xA431",
+    "name": "SerialNumber"
+  },
+  {
+    "id": "0xA432",
+    "name": "LensInfo"
+  },
+  {
+    "id": "0xA433",
+    "name": "LensMake"
+  },
+  {
+    "id": "0xA434",
+    "name": "LensModel"
+  },
+  {
+    "id": "0xA435",
+    "name": "LensSerialNumber"
+  },
+  {
+    "id": "0xA460",
+    "name": "CompositeImage"
+  },
+  {
+    "id": "0xA461",
+    "name": "CompositeImageCount"
+  },
+  {
+    "id": "0xA462",
+    "name": "CompositeImageExposureTimes"
+  },
+  {
+    "id": "0xA500",
+    "name": "Gamma"
+  },
+  {
+    "id": "0xC612",
+    "name": "DNGVersion"
+  },
+  {
+    "id": "0xC613",
+    "name": "DNGBackwardVersion"
+  },
+  {
+    "id": "0xC614",
+    "name": "UniqueCameraModel"
+  },
+  {
+    "id": "0xC615",
+    "name": "LocalizedCameraModel"
+  },
+  {
+    "id": "0xC62F",
+    "name": "CameraSerialNumber"
+  },
+  {
+    "id": "0xC630",
+    "name": "DNGLensInfo"
+  },
+  {
+    "id": "0xEA1C",
+    "name": "Padding"
+  }
+]

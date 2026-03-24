@@ -1,0 +1,32 @@
+# Binaries (Windows calls them .exe, Linux/Mac has no extension)
+photometa
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool (e.g. go test -coverprofile=cover.out)
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# IDEs
+.idea/
+.vscode/*
+!.vscode/launch.json
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Local configuration
+.env*
