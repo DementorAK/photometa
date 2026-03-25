@@ -13,17 +13,17 @@ import (
 type MyImageService struct{}
 
 // AnalyzeStream implements port.ImageAnalyzer.
-func (s *MyImageService) AnalyzeStream(ctx context.Context, r io.Reader, name string, size int64) (*domain.ImageFile, error) {
+func (s *MyImageService) AnalyzeStream(_ context.Context, _ io.Reader, name string, _ int64) (*domain.ImageFile, error) {
 	return &domain.ImageFile{Name: name}, nil
 }
 
 // AnalyzeFile implements port.ImageAnalyzer.
-func (s *MyImageService) AnalyzeFile(ctx context.Context, path string) (*domain.ImageFile, error) {
+func (s *MyImageService) AnalyzeFile(_ context.Context, path string) (*domain.ImageFile, error) {
 	return &domain.ImageFile{Path: path}, nil
 }
 
 // ScanDirectory implements port.ImageAnalyzer.
-func (s *MyImageService) ScanDirectory(ctx context.Context, root string) ([]domain.ImageFile, error) {
+func (s *MyImageService) ScanDirectory(_ context.Context, _ string) ([]domain.ImageFile, error) {
 	return []domain.ImageFile{}, nil
 }
 

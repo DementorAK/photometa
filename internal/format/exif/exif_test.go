@@ -7,6 +7,8 @@ import (
 	"github.com/DementorAK/photometa/internal/platform/locale"
 )
 
+const specMake = "Make"
+
 func TestDecode(t *testing.T) {
 	// Construct a minimal valid TIFF payload (Little Endian)
 	header := []byte{'I', 'I', 42, 0, 8, 0, 0, 0}
@@ -46,7 +48,7 @@ func TestDecode(t *testing.T) {
 	data := append(header, ifd...)
 	data = append(data, valueData...)
 
-	tags, err := Decode(data)
+	tags, err := Decode(data, nil)
 	if err != nil {
 		t.Fatalf("Decode failed: %v", err)
 	}
@@ -62,7 +64,7 @@ func TestDecode(t *testing.T) {
 	if val, ok := tags[0].RawValue().(string); !ok || val != "ACME" {
 		t.Errorf("Tag 0 Value = %v, want ACME", tags[0].RawValue())
 	}
-	if name := tags[0].SpecName(); name != "Make" {
+	if name := tags[0].SpecName(); name != specMake {
 		t.Errorf("Tag 0 SpecName = %s, want Make", name)
 	}
 
@@ -84,31 +86,31 @@ func TestName_DefaultLocale(t *testing.T) {
 	// Default locale is "en", Name() should return spec name
 	locale.SetLocale("en")
 	tag := Tag{id: 0x010F}
-	if name := tag.Name(); name != "Make" {
+	if name := tag.Name(); name != specMake {
 		t.Errorf("Name() with en locale = %s, want Make", name)
 	}
 }
 
-func TestName_RussianLocale(t *testing.T) {
-	locale.SetLocale("ru")
+func TestName_UkrainianLocale(t *testing.T) {
+	locale.SetLocale("ua")
 	defer locale.SetLocale("en") // restore
 
 	tag := Tag{id: 0x010F}
-	if name := tag.Name(); name != "Производитель" {
-		t.Errorf("Name() with ru locale = %s, want Производитель", name)
+	if name := tag.Name(); name != "Виробник" {
+		t.Errorf("Name() with ua locale = %s, want Виробник", name)
 	}
 
 	// SpecName should always be English regardless of locale
-	if name := tag.SpecName(); name != "Make" {
+	if name := tag.SpecName(); name != specMake {
 		t.Errorf("SpecName() = %s, want Make", name)
 	}
 }
 
 func TestName_MissingTranslation(t *testing.T) {
-	locale.SetLocale("ru")
+	locale.SetLocale("ua")
 	defer locale.SetLocale("en")
 
-	// ProcessingSoftware (0x000B) — unlikely to have Russian translation
+	// ProcessingSoftware (0x000B) — unlikely to have Ukrainian translation
 	tag := Tag{id: 0x000B}
 	specName := tag.SpecName()
 	name := tag.Name()
@@ -124,7 +126,7 @@ func TestName_UnsupportedLocale(t *testing.T) {
 
 	tag := Tag{id: 0x010F}
 	// No zh.json exists, should fall back to spec name
-	if name := tag.Name(); name != "Make" {
+	if name := tag.Name(); name != specMake {
 		t.Errorf("Name() with zh locale = %s, want Make", name)
 	}
 }
@@ -135,10 +137,10 @@ func TestGPSTag(t *testing.T) {
 		t.Errorf("GPS SpecName = %s, want GPSLatitude", name)
 	}
 
-	locale.SetLocale("ru")
+	locale.SetLocale("ua")
 	defer locale.SetLocale("en")
 	if name := tag.Name(); name != "Широта" {
-		t.Errorf("GPS Name(ru) = %s, want Широта", name)
+		t.Errorf("GPS Name(ua) = %s, want Широта", name)
 	}
 }
 
@@ -161,7 +163,7 @@ func TestDecode_Rational(t *testing.T) {
 	data := append(header, ifd...)
 	data = append(data, valData...)
 
-	tags, err := Decode(data)
+	tags, err := Decode(data, nil)
 	if err != nil {
 		t.Fatalf("Decode failed: %v", err)
 	}
@@ -186,7 +188,7 @@ func TestDecode_WithExifHeader(t *testing.T) {
 	data := append(prefix, header...)
 	data = append(data, ifd...)
 
-	tags, err := Decode(data)
+	tags, err := Decode(data, nil)
 	if err != nil {
 		t.Fatalf("Decode failed with prefix: %v", err)
 	}
@@ -209,7 +211,7 @@ func TestDecode_Invalid(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := Decode(tt.data)
+			_, err := Decode(tt.data, nil)
 			if err == nil {
 				t.Error("expected error, got nil")
 			}

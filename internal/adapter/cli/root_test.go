@@ -212,7 +212,7 @@ func TestRunCLI_WithPathFlag(t *testing.T) {
 	defer oldStdout.Restore()
 
 	// Act
-	runCLI(&cobra.Command{}, mockAnalyzer, &fake.MockLogger{}, "/test/photos", nil, false)
+	_ = runCLI(&cobra.Command{}, mockAnalyzer, &fake.MockLogger{}, "/test/photos", nil, false)
 
 	// Assert
 	output := oldStdout.Output()
@@ -239,8 +239,8 @@ func TestRunCLI_WithFileArgs(t *testing.T) {
 	tmpDir := t.TempDir()
 	f1 := filepath.Join(tmpDir, "image1.jpg")
 	f2 := filepath.Join(tmpDir, "image2.png")
-	os.WriteFile(f1, []byte("test"), 0644)
-	os.WriteFile(f2, []byte("test"), 0644)
+	_ = os.WriteFile(f1, []byte("test"), 0644)
+	_ = os.WriteFile(f2, []byte("test"), 0644)
 
 	oldStdout := captureStdout(t)
 	defer oldStdout.Restore()
@@ -248,7 +248,7 @@ func TestRunCLI_WithFileArgs(t *testing.T) {
 	files := []string{f1, f2}
 
 	// Act
-	runCLI(&cobra.Command{}, mockAnalyzer, &fake.MockLogger{}, "", files, false)
+	_ = runCLI(&cobra.Command{}, mockAnalyzer, &fake.MockLogger{}, "", files, false)
 
 	// Assert
 	if len(mockAnalyzer.AnalyzeFileCalls) != 2 {
@@ -268,13 +268,13 @@ func TestRunCLI_SingleFileArgReturnsObject(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	f1 := filepath.Join(tmpDir, "image1.jpg")
-	os.WriteFile(f1, []byte("test"), 0644)
+	_ = os.WriteFile(f1, []byte("test"), 0644)
 
 	oldStdout := captureStdout(t)
 	defer oldStdout.Restore()
 
 	// Act
-	runCLI(&cobra.Command{}, mockAnalyzer, &fake.MockLogger{}, "", []string{f1}, false)
+	_ = runCLI(&cobra.Command{}, mockAnalyzer, &fake.MockLogger{}, "", []string{f1}, false)
 
 	// Assert
 	output := oldStdout.Output()
@@ -293,7 +293,7 @@ func TestRunCLI_AnalyzeFileError(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	f1 := filepath.Join(tmpDir, "error.jpg")
-	os.WriteFile(f1, []byte("test"), 0644)
+	_ = os.WriteFile(f1, []byte("test"), 0644)
 
 	mockLogger := &fake.MockLogger{}
 	// Act — should not panic, just log error and continue
@@ -371,12 +371,12 @@ func TestRunCLI_MixedFilesAndDirs(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	subDir := tmpDir + "/subdir"
-	os.Mkdir(subDir, 0755)
+	_ = os.Mkdir(subDir, 0755)
 
 	f1 := tmpDir + "/image1.jpg"
 	f2 := subDir + "/image2.jpg"
-	os.WriteFile(f1, []byte("test"), 0644)
-	os.WriteFile(f2, []byte("test"), 0644)
+	_ = os.WriteFile(f1, []byte("test"), 0644)
+	_ = os.WriteFile(f2, []byte("test"), 0644)
 
 	oldStdout := captureStdout(t)
 	defer oldStdout.Restore()
@@ -431,7 +431,7 @@ func TestRunCLI_WithPipeAndOtherArgs(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	f1 := tmpDir + "/file.jpg"
-	os.WriteFile(f1, []byte("test"), 0644)
+	_ = os.WriteFile(f1, []byte("test"), 0644)
 
 	oldStdout := captureStdout(t)
 	defer oldStdout.Restore()
@@ -460,7 +460,7 @@ func TestRunCLI_Stats(t *testing.T) {
 	oldStdout := captureStdout(t)
 	defer oldStdout.Restore()
 
-	runCLI(&cobra.Command{}, mockAnalyzer, mockLogger, "/test", nil, false)
+	_ = runCLI(&cobra.Command{}, mockAnalyzer, mockLogger, "/test", nil, false)
 
 	// The mock logger should have recorded Info calls from the service
 	// The exact messages depend on service implementation
@@ -476,7 +476,7 @@ func TestRunCLI_MultipleFileArgs(t *testing.T) {
 	files := make([]string, 5)
 	for i := 0; i < 5; i++ {
 		files[i] = tmpDir + "/file" + string(rune('0'+i)) + ".jpg"
-		os.WriteFile(files[i], []byte("test"), 0644)
+		_ = os.WriteFile(files[i], []byte("test"), 0644)
 	}
 
 	oldStdout := captureStdout(t)
@@ -500,12 +500,12 @@ func TestRunCLI_StatsWithErrors(t *testing.T) {
 	tmpDir := t.TempDir()
 	files := []string{tmpDir + "/error1.jpg", tmpDir + "/error2.jpg"}
 	for _, f := range files {
-		os.WriteFile(f, []byte("test"), 0644)
+		_ = os.WriteFile(f, []byte("test"), 0644)
 	}
 
 	mockLogger := &fake.MockLogger{}
 
-	runCLI(&cobra.Command{}, mockAnalyzer, mockLogger, "", files, false)
+	_ = runCLI(&cobra.Command{}, mockAnalyzer, mockLogger, "", files, false)
 
 	// Should log warnings for errors
 	if len(mockLogger.WarnCalls) == 0 {
@@ -542,12 +542,12 @@ func TestRunCLI_PathFlagTakesPrecedence(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	file := tmpDir + "/file.jpg"
-	os.WriteFile(file, []byte("test"), 0644)
+	_ = os.WriteFile(file, []byte("test"), 0644)
 
 	oldStdout := captureStdout(t)
 	defer oldStdout.Restore()
 
-	runCLI(&cobra.Command{}, mockAnalyzer, &fake.MockLogger{}, tmpDir, []string{file}, false)
+	_ = runCLI(&cobra.Command{}, mockAnalyzer, &fake.MockLogger{}, tmpDir, []string{file}, false)
 
 	// Path flag should trigger ScanDirectory, not AnalyzeFile
 	if len(mockAnalyzer.ScanDirectoryCalls) != 1 {
@@ -590,7 +590,7 @@ func TestNewLocalesCmd_ReturnsJSON(t *testing.T) {
 
 	err := cmd.Execute()
 
-	w.Close()
+	_ = w.Close()
 	os.Stdout = old
 
 	if err != nil {
@@ -655,7 +655,7 @@ func captureFile(t *testing.T, file **os.File) *capturedOutput {
 	outChan := make(chan string)
 	go func() {
 		var buf bytes.Buffer
-		io.Copy(&buf, r)
+		_, _ = io.Copy(&buf, r)
 		outChan <- buf.String()
 	}()
 
@@ -670,15 +670,15 @@ func captureFile(t *testing.T, file **os.File) *capturedOutput {
 }
 
 func (c *capturedOutput) Restore() {
-	c.writer.Close()
+	_ = c.writer.Close()
 	*c.target = c.oldFile
-	c.reader.Close()
+	_ = c.reader.Close()
 }
 
 func (c *capturedOutput) Output() string {
-	c.writer.Close()
+	_ = c.writer.Close()
 	result := <-c.outChan
 	*c.target = c.oldFile
-	c.reader.Close()
+	_ = c.reader.Close()
 	return result
 }

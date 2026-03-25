@@ -18,6 +18,8 @@ import (
 	"github.com/DementorAK/photometa/internal/fake"
 )
 
+const contentTypeJSON = "application/json"
+
 // ============================================================================
 // HTTP SERVER TESTS
 // ============================================================================
@@ -25,7 +27,7 @@ import (
 func TestHandleAnalyze_Success(t *testing.T) {
 	// Arrange
 	mockAnalyzer := fake.NewMockImageAnalyzer()
-	mockAnalyzer.AnalyzeStreamFn = func(ctx context.Context, r io.Reader, name string, size int64) (*domain.ImageFile, error) {
+	mockAnalyzer.AnalyzeStreamFn = func(_ context.Context, _ io.Reader, name string, size int64) (*domain.ImageFile, error) {
 		return &domain.ImageFile{
 			Name: name,
 			Metadata: domain.Metadata{
@@ -56,7 +58,7 @@ func TestHandleAnalyze_Success(t *testing.T) {
 		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
 	}
 
-	if rec.Header().Get("Content-Type") != "application/json" {
+	if rec.Header().Get("Content-Type") != contentTypeJSON {
 		t.Errorf("expected Content-Type 'application/json', got %q", rec.Header().Get("Content-Type"))
 	}
 
@@ -138,7 +140,7 @@ func TestHandleAnalyze_MissingFile(t *testing.T) {
 func TestHandleAnalyze_AnalyzerError(t *testing.T) {
 	// Arrange
 	mockAnalyzer := fake.NewMockImageAnalyzer()
-	mockAnalyzer.AnalyzeStreamFn = func(ctx context.Context, r io.Reader, name string, size int64) (*domain.ImageFile, error) {
+	mockAnalyzer.AnalyzeStreamFn = func(_ context.Context, _ io.Reader, _ string, _ int64) (*domain.ImageFile, error) {
 		return nil, errors.New("corrupted image file")
 	}
 
@@ -184,7 +186,7 @@ func TestHandleLocales_Success(t *testing.T) {
 		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
 	}
 
-	if rec.Header().Get("Content-Type") != "application/json" {
+	if rec.Header().Get("Content-Type") != contentTypeJSON {
 		t.Errorf("expected Content-Type 'application/json', got %q", rec.Header().Get("Content-Type"))
 	}
 
@@ -318,7 +320,7 @@ func TestLocalizeMetadata(t *testing.T) {
 			lang: "en",
 		},
 		{
-			name: "with equipment in Russian",
+			name: "with equipment in Ukrainian",
 			meta: domain.Metadata{
 				Format:   "jpeg",
 				FileSize: 1024,
@@ -327,7 +329,7 @@ func TestLocalizeMetadata(t *testing.T) {
 					{Type: "EXIF", Group: "Equipment", Name: "Model", Value: "EOS 5D"},
 				},
 			},
-			lang: "ru",
+			lang: "ua",
 		},
 		{
 			name: "with date and GPS",
@@ -403,11 +405,9 @@ func TestLocalizeMetadata(t *testing.T) {
 	}
 }
 
-
-
 func TestHandleAnalyze_WithLang(t *testing.T) {
 	mockAnalyzer := fake.NewMockImageAnalyzer()
-	mockAnalyzer.AnalyzeStreamFn = func(ctx context.Context, r io.Reader, name string, size int64) (*domain.ImageFile, error) {
+	mockAnalyzer.AnalyzeStreamFn = func(_ context.Context, _ io.Reader, name string, size int64) (*domain.ImageFile, error) {
 		return &domain.ImageFile{
 			Name: name,
 			Metadata: domain.Metadata{
@@ -420,7 +420,7 @@ func TestHandleAnalyze_WithLang(t *testing.T) {
 	server := NewServer(mockAnalyzer)
 
 	body, contentType := createMultipartRequest(t, "file", "test.jpg", []byte("fake"))
-	req := httptest.NewRequest(http.MethodPost, "/analyze?lang=ru", body)
+	req := httptest.NewRequest(http.MethodPost, "/analyze?lang=ua", body)
 	req.Header.Set("Content-Type", contentType)
 	rec := httptest.NewRecorder()
 
@@ -433,7 +433,7 @@ func TestHandleAnalyze_WithLang(t *testing.T) {
 
 func TestHandleAnalyze_PartialSuccess(t *testing.T) {
 	mockAnalyzer := fake.NewMockImageAnalyzer()
-	mockAnalyzer.AnalyzeStreamFn = func(ctx context.Context, r io.Reader, name string, size int64) (*domain.ImageFile, error) {
+	mockAnalyzer.AnalyzeStreamFn = func(_ context.Context, _ io.Reader, name string, size int64) (*domain.ImageFile, error) {
 		return &domain.ImageFile{
 			Name: name,
 			Metadata: domain.Metadata{
@@ -496,7 +496,7 @@ func TestHandleDemo_WrongMethod(t *testing.T) {
 
 func TestAnalyzeResponse_JSONFormat(t *testing.T) {
 	mockAnalyzer := fake.NewMockImageAnalyzer()
-	mockAnalyzer.AnalyzeStreamFn = func(ctx context.Context, r io.Reader, name string, size int64) (*domain.ImageFile, error) {
+	mockAnalyzer.AnalyzeStreamFn = func(_ context.Context, _ io.Reader, name string, size int64) (*domain.ImageFile, error) {
 		return &domain.ImageFile{
 			Name: name,
 			Metadata: domain.Metadata{
@@ -515,7 +515,7 @@ func TestAnalyzeResponse_JSONFormat(t *testing.T) {
 
 	server.handleAnalyze(rec, req)
 
-	if rec.Header().Get("Content-Type") != "application/json" {
+	if rec.Header().Get("Content-Type") != contentTypeJSON {
 		t.Errorf("expected Content-Type 'application/json', got %q", rec.Header().Get("Content-Type"))
 	}
 
@@ -530,7 +530,7 @@ func TestLoggingMiddleware_CapturesStatus(t *testing.T) {
 	s := NewServer(fake.NewMockImageAnalyzer())
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/status", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusCreated)
 	})
 
@@ -571,9 +571,9 @@ func TestMiddleware(t *testing.T) {
 	s := NewServer(fake.NewMockImageAnalyzer())
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/test", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("ok"))
+		_, _ = w.Write([]byte("ok"))
 	})
 
 	handler := wrap(mux,
@@ -621,9 +621,9 @@ func TestMiddleware(t *testing.T) {
 
 	t.Run("Timeout", func(t *testing.T) {
 		slowMux := http.NewServeMux()
-		slowMux.HandleFunc("/slow", func(w http.ResponseWriter, r *http.Request) {
+		slowMux.HandleFunc("/slow", func(w http.ResponseWriter, _ *http.Request) {
 			time.Sleep(200 * time.Millisecond)
-			w.Write([]byte("too slow"))
+			_, _ = w.Write([]byte("too slow"))
 		})
 
 		timeoutHandler := s.timeoutMiddleware(50 * time.Millisecond)(slowMux)

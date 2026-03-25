@@ -35,7 +35,7 @@ func TestDecode(t *testing.T) {
 <?xpacket end="w"?>
 	`)
 
-	tags, err := Decode(xmlData)
+	tags, err := Decode(xmlData, nil)
 	if err != nil {
 		t.Fatalf("Decode failed: %v", err)
 	}
@@ -69,13 +69,13 @@ func TestDecode(t *testing.T) {
 	}
 }
 
-func TestXMP_RussianLocale(t *testing.T) {
-	locale.SetLocale("ru")
+func TestXMP_UkrainianLocale(t *testing.T) {
+	locale.SetLocale("ua")
 	defer locale.SetLocale("en")
 
 	tag := Tag{namespace: "dc", name: "creator"}
 	if name := tag.Name(); name != "Автор" {
-		t.Errorf("Name(ru) = %s, want Автор", name)
+		t.Errorf("Name(ua) = %s, want Автор", name)
 	}
 	if name := tag.SpecName(); name != "Creator" {
 		t.Errorf("SpecName = %s, want Creator", name)
@@ -91,7 +91,7 @@ func TestXMP_DefaultLocale(t *testing.T) {
 }
 
 func TestDecode_NoXMP(t *testing.T) {
-	_, err := Decode([]byte("Some random binary data that does not have xmpmeta or rdf:RDF"))
+	_, err := Decode([]byte("Some random binary data that does not have xmpmeta or rdf:RDF"), nil)
 	if err == nil {
 		t.Error("expected error for no XMP present")
 	}

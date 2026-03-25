@@ -8,12 +8,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewGUICmd(service port.ImageAnalyzer, logger port.Logger) *cobra.Command {
+func NewGUICmd(service port.ImageAnalyzer, _ port.Logger) *cobra.Command {
 	return &cobra.Command{
 		Use:     "gui",
 		Aliases: []string{"g"},
 		Short:   "Start the graphical user interface",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			g := gui.NewGUI(service)
 			g.Start()
 			return nil

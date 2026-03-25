@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/DementorAK/photometa/internal/format"
+	"github.com/DementorAK/photometa/internal/port"
 )
 
 // Tag represents a single IPTC metadata tag.
@@ -46,7 +47,7 @@ func (t Tag) String() string {
 
 // Decode parses IPTC data from a byte slice.
 // The data should be the raw IPTC IIM records (starting with 0x1C).
-func Decode(data []byte) ([]Tag, error) {
+func Decode(data []byte, logger port.Logger) ([]Tag, error) {
 	var tags []Tag
 	offset := 0
 
@@ -58,6 +59,9 @@ func Decode(data []byte) ([]Tag, error) {
 		}
 
 		if offset+5 > len(data) {
+			if logger != nil {
+				logger.Error("IPTC data too short for header", "offset", offset)
+			}
 			break
 		}
 
@@ -69,9 +73,13 @@ func Decode(data []byte) ([]Tag, error) {
 
 		// Extended Dataset (size > 32767) - MSB of first size byte is set
 		if size&0x8000 != 0 {
-			numLenBytes := int(size & 0x7FFF)
+			numLenBytes := size & 0x7FFF
 			if offset+5+numLenBytes > len(data) {
-				return tags, fmt.Errorf("truncated extended size")
+				err := fmt.Errorf("truncated extended size")
+				if logger != nil {
+					logger.Error("IPTC parsing error", "error", err)
+				}
+				return tags, err
 			}
 			var extSize uint32
 			for i := 0; i < numLenBytes && i < 4; i++ {
@@ -82,7 +90,11 @@ func Decode(data []byte) ([]Tag, error) {
 		}
 
 		if offset+headerSize+size > len(data) {
-			return tags, fmt.Errorf("truncated dataset value")
+			err := fmt.Errorf("truncated dataset value")
+			if logger != nil {
+				logger.Error("IPTC parsing error", "error", err)
+			}
+			return tags, err
 		}
 
 		valData := data[offset+headerSize : offset+headerSize+size]

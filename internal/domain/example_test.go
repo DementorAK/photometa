@@ -27,7 +27,7 @@ func ExampleImageFile() {
 		return
 	}
 
-	os.Stdout.Write(data)
+	_, _ = os.Stdout.Write(data)
 
 	// Output:
 	// {

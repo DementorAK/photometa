@@ -61,7 +61,7 @@ func SetLocale(code string) {
 	}
 }
 
-// Locale returns the current global locale code (e.g. "en", "ru").
+// Locale returns the current global locale code (e.g. "en", "ua", "ru", "es", "de", "fr").
 func Locale() string {
 	mu.RLock()
 	defer mu.RUnlock()

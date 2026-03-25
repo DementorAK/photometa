@@ -7,6 +7,8 @@ import (
 	"github.com/DementorAK/photometa/internal/platform/locale"
 )
 
+const specByLine = "By-line"
+
 func TestDecode(t *testing.T) {
 	author := "John Doe"
 	caption := "A nice photo"
@@ -32,7 +34,7 @@ func TestDecode(t *testing.T) {
 	payload = append(payload, 0xFF)
 	payload = append(payload, data[13:]...)
 
-	tags, err := Decode(payload)
+	tags, err := Decode(payload, nil)
 	if err != nil {
 		t.Fatalf("Decode failed: %v", err)
 	}
@@ -48,7 +50,7 @@ func TestDecode(t *testing.T) {
 	if val := tags[0].RawValue(); val != "John Doe" {
 		t.Errorf("Tag 0 Value = %v, want John Doe", val)
 	}
-	if name := tags[0].SpecName(); name != "By-line" {
+	if name := tags[0].SpecName(); name != specByLine {
 		t.Errorf("Tag 0 SpecName = %s, want By-line", name)
 	}
 
@@ -58,15 +60,15 @@ func TestDecode(t *testing.T) {
 	}
 }
 
-func TestIPTC_RussianLocale(t *testing.T) {
-	locale.SetLocale("ru")
+func TestIPTC_UkrainianLocale(t *testing.T) {
+	locale.SetLocale("ua")
 	defer locale.SetLocale("en")
 
 	tag := Tag{record: 2, dataset: 80}
 	if name := tag.Name(); name != "Автор" {
-		t.Errorf("Name(ru) = %s, want Автор", name)
+		t.Errorf("Name(ua) = %s, want Автор", name)
 	}
-	if name := tag.SpecName(); name != "By-line" {
+	if name := tag.SpecName(); name != specByLine {
 		t.Errorf("SpecName = %s, want By-line", name)
 	}
 }
@@ -74,7 +76,7 @@ func TestIPTC_RussianLocale(t *testing.T) {
 func TestIPTC_DefaultLocale(t *testing.T) {
 	locale.SetLocale("en")
 	tag := Tag{record: 2, dataset: 80}
-	if name := tag.Name(); name != "By-line" {
+	if name := tag.Name(); name != specByLine {
 		t.Errorf("Name(en) = %s, want By-line", name)
 	}
 }
@@ -90,7 +92,7 @@ func TestDecode_Invalid(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tags, err := Decode(tt.data)
+			tags, err := Decode(tt.data, nil)
 			if err == nil && len(tags) > 0 {
 				t.Errorf("expected error or zero tags, got %d tags", len(tags))
 			}

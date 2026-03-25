@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/DementorAK/photometa/internal/format"
+	"github.com/DementorAK/photometa/internal/port"
 )
 
 // Tag represents a single EXIF metadata tag.
@@ -48,7 +49,7 @@ func (t Tag) String() string {
 // Decode parses EXIF data from a byte slice.
 // The data should be the payload of the APP1 segment (starting with "Exif\x00\x00")
 // or a raw TIFF header.
-func Decode(data []byte) ([]Tag, error) {
+func Decode(data []byte, logger port.Logger) ([]Tag, error) {
 	if len(data) < 4 {
 		return nil, fmt.Errorf("exif data too short")
 	}
@@ -90,15 +91,18 @@ func Decode(data []byte) ([]Tag, error) {
 	visited := make(map[uint32]bool) // Detect loops in IFD chains
 
 	// Process IFD0
-	tags, err := processIFD(tiffData, firstIFDOffset, byteOrder, visited, tags, false)
+	tags, err := processIFD(tiffData, firstIFDOffset, byteOrder, visited, tags, false, logger)
 	if err != nil {
+		if logger != nil {
+			logger.Error("failed to process IFD0", "error", err)
+		}
 		return tags, err // Return partial results
 	}
 
 	return tags, nil
 }
 
-func processIFD(data []byte, offset uint32, bo binary.ByteOrder, visited map[uint32]bool, tags []Tag, isGPS bool) ([]Tag, error) {
+func processIFD(data []byte, offset uint32, bo binary.ByteOrder, visited map[uint32]bool, tags []Tag, isGPS bool, logger port.Logger) ([]Tag, error) {
 	if visited[offset] {
 		return tags, nil
 	}
@@ -133,10 +137,16 @@ func processIFD(data []byte, offset uint32, bo binary.ByteOrder, visited map[uin
 				if ok && subOffset > 0 {
 					switch tagID {
 					case 0x8769: // ExifIFD
-						subTags, _ := processIFD(data, subOffset, bo, visited, nil, false)
+						subTags, err := processIFD(data, subOffset, bo, visited, nil, false, logger)
+						if err != nil && logger != nil {
+							logger.Error("failed to process ExifIFD", "error", err)
+						}
 						tags = append(tags, subTags...)
 					case 0x8825: // GPSInfo
-						subTags, _ := processIFD(data, subOffset, bo, visited, nil, true)
+						subTags, err := processIFD(data, subOffset, bo, visited, nil, true, logger)
+						if err != nil && logger != nil {
+							logger.Error("failed to process GPSInfo IFD", "error", err)
+						}
 						tags = append(tags, subTags...)
 					}
 				}
@@ -152,7 +162,7 @@ func processIFD(data []byte, offset uint32, bo binary.ByteOrder, visited map[uin
 // TIFF Data Types
 const (
 	TypeByte      = 1
-	TypeAscii     = 2
+	TypeASCII     = 2
 	TypeShort     = 3
 	TypeLong      = 4
 	TypeRational  = 5
@@ -185,7 +195,7 @@ func parseValue(data []byte, typ uint16, count uint32, valOrOffset []byte, bo bi
 	}
 
 	switch typ {
-	case TypeAscii:
+	case TypeASCII:
 		s := string(rawData)
 		return strings.TrimRight(s, "\x00"), nil
 	case TypeShort:
@@ -274,7 +284,7 @@ func readSRational(b []byte, bo binary.ByteOrder) float64 {
 
 func typeSize(typ uint16) uint32 {
 	switch typ {
-	case TypeByte, TypeAscii, TypeSByte, TypeUndefined:
+	case TypeByte, TypeASCII, TypeSByte, TypeUndefined:
 		return 1
 	case TypeShort, TypeSShort:
 		return 2

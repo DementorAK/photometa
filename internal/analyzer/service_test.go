@@ -38,7 +38,7 @@ func TestAnalyzeFile_ValidJPEG(t *testing.T) {
 	// Create a temporary test JPEG file
 	// Note: This is a minimal valid JPEG (just header markers)
 	testFile := createTempFile(t, "test*.jpg", minimalJPEG())
-	defer os.Remove(testFile)
+	t.Cleanup(func() { _ = os.Remove(testFile) })
 
 	// Act
 	result, err := service.AnalyzeFile(context.Background(), testFile)
@@ -289,13 +289,13 @@ func createTempFile(t *testing.T, pattern string, content []byte) string {
 	}
 
 	if _, err := f.Write(content); err != nil {
-		f.Close()
-		os.Remove(f.Name())
+		_ = f.Close()
+		_ = os.Remove(f.Name())
 		t.Fatalf("failed to write to temp file: %v", err)
 	}
 
 	if err := f.Close(); err != nil {
-		os.Remove(f.Name())
+		_ = os.Remove(f.Name())
 		t.Fatalf("failed to close temp file: %v", err)
 	}
 

@@ -12,7 +12,7 @@ Project supports multiple run modes:
 
 * **Metadata Extraction**: Read EXIF, IPTC, and XMP data from images.
 * **Batch Processing**: Handle multiple files or directories concurrently.
-* **Multilingual Support**: Tag names in English, Russian, Ukrainian, German, French, and Spanish.
+* **Multilingual Support**: Tag names in English, Ukrainian, Russian, German, French, and Spanish.
 
 ## 📦 Installation
 
@@ -58,7 +58,7 @@ go build ./cmd/photometa
 **Set display language:**
 
 ```bash
-./photometa --locale ru <path-to-image>   # Russian
+./photometa --locale ua <path-to-image>   # Ukrainian
 ./photometa -l de <path-to-image>          # German
 ```
 
@@ -103,7 +103,7 @@ PhotoMeta can read image data directly from standard input.
 ./photometa ~/photos           # analyze all files in the directory
 ./photometa server --port 2233 # start server on port 2233
 ./photometa gui                # working in a graphical interface
-./photometa --locale ru photo.jpg  # analyze with Russian tag names
+./photometa --locale ua photo.jpg  # analyze with Ukrainian tag names
 ./photometa --locale           # list available languages
 ```
 
@@ -121,6 +121,7 @@ Detailed documentation is available in the `docs/` directory:
 *   **[GUI Manual](docs/gui_manual.md)**: How to use the graphical interface.
 *   **[API Reference](docs/api.md)**: HTTP Server API documentation.
 *   **[Architecture Overview](docs/architecture.md)**: Internal design and structure of the project.
+*   **[Test Images](docs/img/README.md)**: Sample images used for testing metadata extraction.
 
 ## 📂 Project Structure
 

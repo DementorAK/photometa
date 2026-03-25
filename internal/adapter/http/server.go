@@ -15,8 +15,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/DementorAK/photometa/internal/platform/assets"
 	"github.com/DementorAK/photometa/internal/domain"
+	"github.com/DementorAK/photometa/internal/platform/assets"
 	"github.com/DementorAK/photometa/internal/platform/locale"
 	"github.com/DementorAK/photometa/internal/port"
 )
@@ -44,7 +44,7 @@ func (s *Server) Start(port string) error {
 	mux.HandleFunc("/icons/", s.handleIcons)
 
 	addr := ":" + port
-	
+
 	// Apply middleware
 	handler := wrap(mux,
 		s.loggingMiddleware,
@@ -124,7 +124,7 @@ func (s *Server) handleAnalyze(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad Request: missing 'file'", http.StatusBadRequest)
 		return
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	lang := r.FormValue("lang")
 	if lang == "" {
@@ -160,7 +160,7 @@ func (s *Server) localizeMetadata(m domain.Metadata, lang string) []LocalizedPro
 		}
 		// Convert value to string and localize if necessary/possible
 		// For simplicity, we handle common types like in the GUI
-		var sVal any = val
+		sVal := val
 		switch v := val.(type) {
 		case string:
 			if v == "" || v == "<nil>" {
@@ -183,7 +183,7 @@ func (s *Server) localizeMetadata(m domain.Metadata, lang string) []LocalizedPro
 			}
 		case int, int64:
 			if v == 0 {
-				// Don't skip if it's dimensions or something where 0 is valid? 
+				// Don't skip if it's dimensions or something where 0 is valid?
 				// But GUI skips 0.
 				return
 			}
@@ -205,7 +205,7 @@ func (s *Server) localizeMetadata(m domain.Metadata, lang string) []LocalizedPro
 	var lat, lng *float64
 	var latType, lngType string
 	for _, t := range m.Tags {
-		var val any = t.Value
+		val := t.Value
 		name := t.Name
 
 		switch name {
@@ -261,7 +261,9 @@ func (s *Server) handleLocales(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(locale.GetLocales())
+	if err := json.NewEncoder(w).Encode(locale.GetLocales()); err != nil {
+		slog.Error("Failed to encode locales", "error", err)
+	}
 }
 
 func (s *Server) handleDemo(w http.ResponseWriter, r *http.Request) {
@@ -271,7 +273,9 @@ func (s *Server) handleDemo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/html")
-	w.Write(demoHTML)
+	if _, err := w.Write(demoHTML); err != nil {
+		slog.Error("Failed to write demo HTML", "error", err)
+	}
 }
 
 func (s *Server) handleIcons(w http.ResponseWriter, r *http.Request) {
@@ -285,7 +289,9 @@ func (s *Server) handleIcons(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "image/svg+xml")
-	w.Write(svg)
+	if _, err := w.Write(svg); err != nil {
+		slog.Error("Failed to write icon SVG", "name", name, "error", err)
+	}
 }
 
 type middleware func(http.Handler) http.Handler
@@ -300,12 +306,12 @@ func wrap(h http.Handler, mws ...middleware) http.Handler {
 func (s *Server) loggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-		
+
 		// Use a custom response writer to capture status code
 		subWriter := &responseWriter{ResponseWriter: w, status: http.StatusOK}
-		
+
 		next.ServeHTTP(subWriter, r)
-		
+
 		slog.Info("HTTP Request",
 			"method", r.Method,
 			"path", r.URL.Path,
@@ -324,8 +330,8 @@ func (s *Server) timeoutMiddleware(timeout time.Duration) middleware {
 
 var (
 	rateLimitMu sync.Mutex
-	lastSeen   = make(map[string]time.Time)
-	tokens     = make(map[string]int)
+	lastSeen    = make(map[string]time.Time)
+	tokens      = make(map[string]int)
 )
 
 func (s *Server) rateLimitMiddleware(limit int, period time.Duration) middleware {
@@ -335,7 +341,7 @@ func (s *Server) rateLimitMiddleware(limit int, period time.Duration) middleware
 
 			rateLimitMu.Lock()
 			now := time.Now()
-			
+
 			// Simple token bucket: reset tokens every period
 			if now.Sub(lastSeen[ip]) > period {
 				tokens[ip] = limit

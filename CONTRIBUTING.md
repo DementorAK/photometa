@@ -8,7 +8,17 @@ Before you start, ensure you have the following installed:
 
 *   **Go** (version 1.21 or higher)
 *   **Git**
+*   **Git LFS** (Required for test images ~200MB) - See [Installation](https://git-lfs.github.io/)
 *   **GCC** (Required for Fyne GUI) - See [Fyne Prerequisites](https://developer.fyne.io/started/)
+*   **golangci-lint** (Required for linting):
+    ```bash
+    # Linux/macOS
+    go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+    
+    # Windows (PowerShell)
+    go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+    ```
+    See also: [Installation Guide](https://golangci-lint.run/usage/install/#local-installation)
 
 ## 🚀 Getting Started
 
@@ -18,7 +28,12 @@ Before you start, ensure you have the following installed:
     git clone https://github.com/your-username/photometa.git
     cd photometa
     ```
-3.  **Create a branch** for your feature or bug fix:
+3.  **Download test images** (stored via Git LFS):
+    ```bash
+    git lfs install
+    git lfs pull
+    ```
+4.  **Create a branch** for your feature or bug fix:
     ```bash
     git checkout -b feature/my-new-feature
     ```
@@ -53,7 +68,7 @@ go test ./...
 go test -race ./...
 ```
 
-## 🎨 Code Style
+## 🔎 Check Code Style & Linting
 
 We follow standard Go coding conventions. Please ensure your code is formatted correctly.
 
@@ -63,6 +78,9 @@ go fmt ./...
 
 # Vet code
 go vet ./...
+
+# Run linter (REQUIRED before Pull Request)
+golangci-lint run ./...
 ```
 
 ## 📐 Project Structure
@@ -80,6 +98,7 @@ This project follows the **Hexagonal Architecture (Ports and Adapters)** pattern
 | `internal/platform` | Infrastructure (logger, locale, assets, version) |
 | `internal/port` | Interface definitions (ImageAnalyzer, Logger) |
 | `integration/` | Integration tests (cross-layer testing) |
+| `docs/img/` | Sample images used for integration testing |
 
 ### Versioning
 
@@ -108,6 +127,7 @@ go build -ldflags="-X github.com/DementorAK/photometa/internal/platform/version.
 
 *   `internal/fake/` — Contains test doubles (e.g., `FakeLogger`) that implement interfaces from `internal/port`. Use these in your unit tests to avoid external dependencies.
 *   `integration/` — Contains tests that verify interactions between multiple layers (e.g., Analyzer → Format parsers → Domain models). Run with `go test ./integration/...`.
+*   `docs/img/` — Sample images used for integration testing. Images are stored via Git LFS due to size (~100MB). Run `git lfs pull` after cloning to download them.
 
 Please respect this separation of concerns when adding new features.
 

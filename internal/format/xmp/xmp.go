@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/DementorAK/photometa/internal/format"
+	"github.com/DementorAK/photometa/internal/port"
 )
 
 // Tag represents a single XMP metadata tag.
@@ -59,16 +60,9 @@ type xmlItem struct {
 	Attrs   []xml.Attr `xml:",any,attr"`
 }
 
-type rdfRDF struct {
-	Descriptions []rdfDescription `xml:"Description"`
-}
-
-type xmpMetaRoot struct {
-	RDF rdfRDF `xml:"RDF"`
-}
 
 // Decode parses XMP data from a byte slice containing the XML structure.
-func Decode(data []byte) ([]Tag, error) {
+func Decode(data []byte, logger port.Logger) ([]Tag, error) {
 	// Look for the <?xpacket begin=... ?> or <x:xmpmeta> prefix
 	startIdx := bytes.Index(data, []byte("<x:xmpmeta"))
 	if startIdx == -1 {
@@ -128,12 +122,17 @@ func Decode(data []byte) ([]Tag, error) {
 
 				// Parse inner elements of Description
 				var description rdfDescription
-				decoder.DecodeElement(&description, &se)
+				if err := decoder.DecodeElement(&description, &se); err != nil {
+					if logger != nil {
+						logger.Error("failed to decode XMP element", "error", err)
+					}
+					continue
+				}
 
 				for _, item := range description.Items {
-					val := string(item.Content)
+					var val string
 					if bytes.Contains(item.Content, []byte("<rdf:Alt>")) || bytes.Contains(item.Content, []byte("<rdf:Seq>")) || bytes.Contains(item.Content, []byte("<rdf:Bag>")) {
-						val = extractBagElements(item.Content)
+						val = extractBagElements(item.Content, logger)
 					} else {
 						val = extractTextOnly(item.Content)
 					}
@@ -151,7 +150,7 @@ func Decode(data []byte) ([]Tag, error) {
 	return tags, nil
 }
 
-func extractBagElements(data []byte) string {
+func extractBagElements(data []byte, logger port.Logger) string {
 	decoder := xml.NewDecoder(bytes.NewReader(data))
 	var items []string
 	for {
@@ -161,7 +160,11 @@ func extractBagElements(data []byte) string {
 		}
 		if se, ok := t.(xml.StartElement); ok && se.Name.Local == "li" {
 			var val string
-			decoder.DecodeElement(&val, &se)
+			if err := decoder.DecodeElement(&val, &se); err != nil {
+				if logger != nil {
+					logger.Error("failed to decode XMP list item", "error", err)
+				}
+			}
 			if val != "" {
 				items = append(items, val)
 			}

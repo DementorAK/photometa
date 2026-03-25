@@ -31,7 +31,7 @@ func NewService(logger port.Logger) *Service {
 }
 
 // AnalyzeStream processes an image from a generic reader (stdin, http request).
-func (s *Service) AnalyzeStream(ctx context.Context, r io.Reader, name string, size int64) (*domain.ImageFile, error) {
+func (s *Service) AnalyzeStream(_ context.Context, r io.Reader, name string, size int64) (*domain.ImageFile, error) {
 	s.logger.Info("analyzing stream", "name", name, "size", size)
 	buf, err := io.ReadAll(r)
 	if err != nil {
@@ -60,7 +60,7 @@ func (s *Service) AnalyzeStream(ctx context.Context, r io.Reader, name string, s
 }
 
 // AnalyzeFile processes a single file path.
-func (s *Service) AnalyzeFile(ctx context.Context, path string) (*domain.ImageFile, error) {
+func (s *Service) AnalyzeFile(_ context.Context, path string) (*domain.ImageFile, error) {
 	s.logger.Info("analyzing file", "path", path)
 	info, err := os.Stat(path)
 	if err != nil {

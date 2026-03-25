@@ -19,7 +19,7 @@ func NewServerCmd(service port.ImageAnalyzer, logger port.Logger) *cobra.Command
 		Use:     "server",
 		Aliases: []string{"s"},
 		Short:   "Start the metadata analysis web server",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			srv := http.NewServer(service)
 			logger.Info("Starting server", "port", portFlag)
 			if err := srv.Start(portFlag); err != nil {

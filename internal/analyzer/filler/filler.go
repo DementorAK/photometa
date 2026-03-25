@@ -31,24 +31,30 @@ func Fill(r io.ReadSeeker, meta *domain.Metadata, logger port.Logger) {
 
 	// Process EXIF tags
 	if len(segs.exif) > 0 {
-		exifTags, err := exif.Decode(segs.exif)
-		if err == nil {
+		exifTags, err := exif.Decode(segs.exif, logger)
+		if err != nil {
+			logger.Error("failed to decode EXIF", "error", err)
+		} else {
 			fillExifTags(exifTags, meta, logger)
 		}
 	}
 
 	// Process IPTC tags
 	if len(segs.iptc) > 0 {
-		iptcTags, err := iptc.Decode(segs.iptc)
-		if err == nil {
+		iptcTags, err := iptc.Decode(segs.iptc, logger)
+		if err != nil {
+			logger.Error("failed to decode IPTC", "error", err)
+		} else {
 			fillIPTCTags(iptcTags, meta, logger)
 		}
 	}
 
 	// Process XMP tags
 	if len(segs.xmp) > 0 {
-		xmpTags, err := xmp.Decode(segs.xmp)
-		if err == nil {
+		xmpTags, err := xmp.Decode(segs.xmp, logger)
+		if err != nil {
+			logger.Error("failed to decode XMP", "error", err)
+		} else {
 			fillXMPTags(xmpTags, meta, logger)
 		}
 	}

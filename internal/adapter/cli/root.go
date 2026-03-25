@@ -27,7 +27,7 @@ func NewRootCmd(service port.ImageAnalyzer, logger port.Logger) *cobra.Command {
 		// This line is CRITICAL: it tells Cobra to allow positional arguments
 		// and pass them to the Run function instead of failing with "unknown command".
 		Args: cobra.ArbitraryArgs,
-		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		PersistentPreRun: func(_ *cobra.Command, _ []string) {
 			// If --locale was passed with a value, set the locale.
 			if localeFlag != "" {
 				locale.SetLocale(localeFlag)
@@ -68,7 +68,7 @@ func NewLocalesCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "locales",
 		Short: "List available display languages",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			return encodeJSON(locale.GetLocales())
 		},
 	}
@@ -81,7 +81,7 @@ func NewVersionCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "version",
 		Short: "Print version information",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			if jsonFlag {
 				info := map[string]string{
 					"version": version.Version,

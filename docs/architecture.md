@@ -102,3 +102,4 @@ Contains technical capabilities that support the application layers.
 
 *   **`internal/fake/`**: Test doubles that implement interfaces from `internal/port`. Used for unit testing without external dependencies.
 *   **`integration/`**: Integration tests that verify cross-layer interactions.
+*   **`docs/img/`**: Sample images used for integration testing.

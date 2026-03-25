@@ -7,43 +7,21 @@ import (
 	"testing"
 
 	"github.com/DementorAK/photometa/internal/analyzer"
+	"github.com/DementorAK/photometa/internal/domain"
 	"github.com/DementorAK/photometa/internal/fake"
 )
 
-func TestIntegration_AnalyzeWebP(t *testing.T) {
-	logger := fake.NewMockLogger()
-	service := analyzer.NewService(logger)
-
-	cwd, _ := os.Getwd()
-	webpPath := filepath.Join(cwd, "..", "docs", "img", "sample_webp.webp")
-	if _, err := os.Stat(webpPath); os.IsNotExist(err) {
-		webpPath = filepath.Join(cwd, "docs", "img", "sample_webp.webp")
+func hasTagType(tags []domain.TagInfo, tagType string) bool {
+	for _, tag := range tags {
+		if tag.Type == tagType {
+			return true
+		}
 	}
+	return false
+}
 
-	if _, err := os.Stat(webpPath); os.IsNotExist(err) {
-		t.Skipf("Skipping integration test: webp image not found at %s", webpPath)
-	}
-
-	ctx := context.Background()
-	result, err := service.AnalyzeFile(ctx, webpPath)
-	if err != nil {
-		t.Fatalf("Failed to analyze webp image: %v", err)
-	}
-
-	if result == nil {
-		t.Fatal("Expected non-nil result")
-	}
-
-	if result.Metadata.Format != "webp" {
-		t.Errorf("Expected format 'webp', got %q", result.Metadata.Format)
-	}
-
-	// sample_webp.webp is known to have some tags (from previous conversations context)
-	if len(result.Metadata.Tags) == 0 {
-		t.Error("Expected metadata tags for sample_webp.webp, got none")
-	}
-
-	t.Logf("Successfully analyzed WebP. Tags count: %d", len(result.Metadata.Tags))
+func hasAnyMetadata(tags []domain.TagInfo) bool {
+	return hasTagType(tags, "EXIF") || hasTagType(tags, "IPTC") || hasTagType(tags, "XMP")
 }
 
 func TestIntegration_AnalyzeDirectory(t *testing.T) {
@@ -77,7 +55,7 @@ func TestIntegration_AnalyzeDirectory(t *testing.T) {
 		}
 		if res.Name == "photometa_logo.jpg" {
 			foundLogo = true
-			// Check that it has NO meta-tags (EXIF, IPTC, XMP)
+			// Logo should have NO EXIF, IPTC, or XMP tags
 			for _, tag := range res.Metadata.Tags {
 				if tag.Type == "EXIF" || tag.Type == "IPTC" || tag.Type == "XMP" {
 					t.Errorf("Found unexpected meta-tag %q of type %q in photometa_logo.jpg", tag.Name, tag.Type)
@@ -95,4 +73,116 @@ func TestIntegration_AnalyzeDirectory(t *testing.T) {
 	}
 
 	t.Logf("Directory scan successful. Found %d images.", len(results))
+}
+
+func TestIntegration_AllSamplesHaveMetadata(t *testing.T) {
+	logger := fake.NewMockLogger()
+	service := analyzer.NewService(logger)
+
+	cwd, _ := os.Getwd()
+	imgDir := filepath.Join(cwd, "..", "docs", "img")
+	if _, err := os.Stat(imgDir); os.IsNotExist(err) {
+		imgDir = filepath.Join(cwd, "docs", "img")
+	}
+
+	if _, err := os.Stat(imgDir); os.IsNotExist(err) {
+		t.Skipf("Skipping integration test: image directory not found at %s", imgDir)
+	}
+
+	ctx := context.Background()
+	results, err := service.ScanDirectory(ctx, imgDir)
+	if err != nil {
+		t.Fatalf("Failed to scan directory: %v", err)
+	}
+
+	excludedFiles := map[string]bool{
+		"README.md":          true,
+		"photometa_logo.jpg": true,
+	}
+
+	for _, res := range results {
+		if excludedFiles[res.Name] {
+			continue
+		}
+
+		if !hasAnyMetadata(res.Metadata.Tags) {
+			t.Errorf("Expected at least one metadata type (EXIF, IPTC, or XMP) for %s, got none", res.Name)
+		}
+	}
+}
+
+func TestIntegration_SampleJPG1HasAllMetadataTypes(t *testing.T) {
+	logger := fake.NewMockLogger()
+	service := analyzer.NewService(logger)
+
+	cwd, _ := os.Getwd()
+	jpegPath := filepath.Join(cwd, "..", "docs", "img", "sample_jpg_1.jpg")
+	if _, err := os.Stat(jpegPath); os.IsNotExist(err) {
+		jpegPath = filepath.Join(cwd, "docs", "img", "sample_jpg_1.jpg")
+	}
+
+	if _, err := os.Stat(jpegPath); os.IsNotExist(err) {
+		t.Skipf("Skipping integration test: sample_jpg_1.jpg not found at %s", jpegPath)
+	}
+
+	ctx := context.Background()
+	result, err := service.AnalyzeFile(ctx, jpegPath)
+	if err != nil {
+		t.Fatalf("Failed to analyze sample_jpg_1.jpg: %v", err)
+	}
+
+	if result == nil {
+		t.Fatal("Expected non-nil result")
+	}
+
+	if result.Metadata.Format != "jpeg" {
+		t.Errorf("Expected format 'jpeg', got %q", result.Metadata.Format)
+	}
+
+	if !hasTagType(result.Metadata.Tags, "EXIF") {
+		t.Error("sample_jpg_1.jpg must have EXIF metadata")
+	}
+	if !hasTagType(result.Metadata.Tags, "IPTC") {
+		t.Error("sample_jpg_1.jpg must have IPTC metadata")
+	}
+	if !hasTagType(result.Metadata.Tags, "XMP") {
+		t.Error("sample_jpg_1.jpg must have XMP metadata")
+	}
+
+	t.Logf("sample_jpg_1.jpg has all metadata types. Tags count: %d", len(result.Metadata.Tags))
+}
+
+func TestIntegration_AnalyzeWebP(t *testing.T) {
+	logger := fake.NewMockLogger()
+	service := analyzer.NewService(logger)
+
+	cwd, _ := os.Getwd()
+	webpPath := filepath.Join(cwd, "..", "docs", "img", "sample_webp.webp")
+	if _, err := os.Stat(webpPath); os.IsNotExist(err) {
+		webpPath = filepath.Join(cwd, "docs", "img", "sample_webp.webp")
+	}
+
+	if _, err := os.Stat(webpPath); os.IsNotExist(err) {
+		t.Skipf("Skipping integration test: webp image not found at %s", webpPath)
+	}
+
+	ctx := context.Background()
+	result, err := service.AnalyzeFile(ctx, webpPath)
+	if err != nil {
+		t.Fatalf("Failed to analyze webp image: %v", err)
+	}
+
+	if result == nil {
+		t.Fatal("Expected non-nil result")
+	}
+
+	if result.Metadata.Format != "webp" {
+		t.Errorf("Expected format 'webp', got %q", result.Metadata.Format)
+	}
+
+	if len(result.Metadata.Tags) == 0 {
+		t.Error("Expected metadata tags for sample_webp.webp, got none")
+	}
+
+	t.Logf("Successfully analyzed WebP. Tags count: %d", len(result.Metadata.Tags))
 }

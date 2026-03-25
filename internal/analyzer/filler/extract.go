@@ -28,7 +28,7 @@ func extractSegments(r io.ReadSeeker, format imageformat.Format, logger port.Log
 
 	switch format {
 	case imageformat.JPEG:
-		return extractSegmentsJPEG(r)
+		return extractSegmentsJPEG(r, logger)
 	case imageformat.PNG:
 		return extractSegmentsPNG(r, logger)
 	case imageformat.WebP:
@@ -41,7 +41,7 @@ func extractSegments(r io.ReadSeeker, format imageformat.Format, logger port.Log
 	}
 }
 
-func extractSegmentsJPEG(r io.ReadSeeker) (segments, error) {
+func extractSegmentsJPEG(r io.ReadSeeker, logger port.Logger) (segments, error) {
 	var segs segments
 
 	// Read SOI
@@ -130,14 +130,17 @@ func extractSegmentsJPEG(r io.ReadSeeker) (segments, error) {
 				} else {
 					segs.exif = append(segs.exif, data...)
 				}
+				logger.Debug("extracted EXIF from JPEG APP1", "len", len(data))
 			} else if len(data) >= 29 && bytes.HasPrefix(data, []byte("http://ns.adobe.com/xap/1.0/\x00")) {
 				if len(segs.xmp) == 0 {
 					segs.xmp = data
 				} else {
 					segs.xmp = append(segs.xmp, data...)
 				}
+				logger.Debug("extracted XMP from JPEG APP1", "len", len(data))
 			} else if len(data) >= 35 && bytes.HasPrefix(data, []byte("http://ns.adobe.com/xmp/extension/\x00")) {
 				segs.xmp = append(segs.xmp, data...)
+				logger.Debug("extracted XMP extension from JPEG APP1", "len", len(data))
 			}
 			continue
 		}
@@ -151,13 +154,16 @@ func extractSegmentsJPEG(r io.ReadSeeker) (segments, error) {
 
 			if len(data) >= 1 && data[0] == 0x1C {
 				segs.iptc = data
+				logger.Debug("extracted IPTC from JPEG APP13", "len", len(data))
 			} else if len(data) >= 14 && bytes.HasPrefix(data, []byte("Photoshop 3.0\x00")) {
 				if parsed := extractIPTCFromIRB(data[14:]); len(parsed) > 0 {
 					segs.iptc = parsed
+					logger.Debug("extracted IPTC from Photoshop 3.0 IRB", "len", len(parsed))
 				}
 			} else if len(data) >= 20 && bytes.HasPrefix(data, []byte("Adobe_Photoshop2.0\x00")) {
 				if parsed := extractIPTCFromIRB(data[20:]); len(parsed) > 0 {
 					segs.iptc = parsed
+					logger.Debug("extracted IPTC from Adobe Photoshop2.0 IRB", "len", len(parsed))
 				}
 			}
 			continue
@@ -312,9 +318,17 @@ func extractSegmentsWebP(r io.ReadSeeker, logger port.Logger) (segments, error) 
 				// 24-bit little endian width and height
 				segs.width = 1 + int(data[4]) | int(data[5])<<8 | int(data[6])<<16
 				segs.height = 1 + int(data[7]) | int(data[8])<<8 | int(data[9])<<16
-				r.Seek(int64(paddedLen-10), io.SeekCurrent)
+				if _, err := r.Seek(int64(paddedLen-10), io.SeekCurrent); err != nil {
+					if logger != nil {
+						logger.Error("failed to seek in WebP VP8X chunk", "error", err)
+					}
+				}
 			} else {
-				r.Seek(int64(paddedLen), io.SeekCurrent)
+				if _, err := r.Seek(int64(paddedLen), io.SeekCurrent); err != nil {
+					if logger != nil {
+						logger.Error("failed to skip WebP VP8X chunk", "error", err)
+					}
+				}
 			}
 		case "EXIF":
 			segs.exif = make([]byte, length)
@@ -322,7 +336,11 @@ func extractSegmentsWebP(r io.ReadSeeker, logger port.Logger) (segments, error) 
 				return segs, err
 			}
 			if paddedLen > length {
-				r.Seek(1, io.SeekCurrent)
+				if _, err := r.Seek(1, io.SeekCurrent); err != nil {
+					if logger != nil {
+						logger.Error("failed to skip WebP chunk padding", "error", err)
+					}
+				}
 			}
 			logger.Debug("extracted EXIF from WebP", "len", length)
 		case "XMP ":
@@ -331,11 +349,15 @@ func extractSegmentsWebP(r io.ReadSeeker, logger port.Logger) (segments, error) 
 				return segs, err
 			}
 			if paddedLen > length {
-				r.Seek(1, io.SeekCurrent)
+				_, _ = r.Seek(1, io.SeekCurrent)
 			}
 			logger.Debug("extracted XMP from WebP", "len", length)
 		default:
-			r.Seek(int64(paddedLen), io.SeekCurrent)
+			if _, err := r.Seek(int64(paddedLen), io.SeekCurrent); err != nil {
+				if logger != nil {
+					logger.Error("failed to skip unknown WebP chunk", "error", err)
+				}
+			}
 		}
 	}
 

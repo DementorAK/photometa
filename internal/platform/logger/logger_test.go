@@ -101,7 +101,7 @@ func TestSlogLogger_Debug(t *testing.T) {
 	}
 }
 
-func TestSlogLogger_ImplementsPortLogger(t *testing.T) {
+func TestSlogLogger_ImplementsPortLogger(_ *testing.T) {
 	var _ interface {
 		Info(msg string, args ...any)
 		Error(msg string, args ...any)
