@@ -45,16 +45,20 @@ builds:
       - -X github.com/DementorAK/photometa/internal/platform/version.Date={{ .Date }}
 
 archives:
-  - ids:
+  - id: cli-archive
+    ids:
       - photometa-cli
+    format: tar.gz
     format_overrides:
       - goos: windows
         format: zip
     files:
       - README.md
       - LICENSE
-  - ids:
+  - id: gui-archive
+    ids:
       - photometa-gui
+    format: tar.gz
     format_overrides:
       - goos: windows
         format: zip
@@ -66,7 +70,7 @@ checksum:
   name_template: 'checksums.txt'
 
 snapshot:
-  name_template: "{{ .Tag }}-next"
+  name: "{{ .Tag }}-next"
 
 changelog:
   sort: asc
