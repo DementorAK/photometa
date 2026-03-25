@@ -1,27 +1,17 @@
-version: "2"
+run:
+  timeout: 5m
+
 linters:
+  disable-all: false
   enable:
-    - goconst
+    - errcheck
+    - govet
+    - staticcheck
+    - gosimple
     - revive
     - unconvert
-  exclusions:
-    generated: lax
-    presets:
-      - comments
-      - common-false-positives
-      - legacy
-      - std-error-handling
-    paths:
-      - third_party$
-      - builtin$
-      - examples$
+    - goconst
+
 issues:
   max-issues-per-linter: 0
   max-same-issues: 0
-formatters:
-  exclusions:
-    generated: lax
-    paths:
-      - third_party$
-      - builtin$
-      - examples$

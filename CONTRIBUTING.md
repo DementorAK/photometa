@@ -18,7 +18,6 @@ Before you start, ensure you have the following installed:
     # Windows (PowerShell)
     go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
     ```
-    See also: [Installation Guide](https://golangci-lint.run/usage/install/#local-installation)
 
 ## 🚀 Getting Started
 
