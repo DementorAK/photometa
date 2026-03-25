@@ -7,7 +7,7 @@ before:
     - go mod download
 
 builds:
-  - id: photometa
+  - id: photometa-cli
     main: ./cmd/photometa
     binary: photometa
     env:
@@ -25,8 +25,36 @@ builds:
       - -X github.com/DementorAK/photometa/internal/platform/version.Commit={{ .Commit }}
       - -X github.com/DementorAK/photometa/internal/platform/version.Date={{ .Date }}
 
+  - id: photometa-gui
+    main: ./cmd/photometa
+    binary: photometa_gui
+    env:
+      - CGO_ENABLED=1
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    tags:
+      - gui
+    ldflags:
+      - -s -w
+      - -X github.com/DementorAK/photometa/internal/platform/version.Version={{ .Version }}
+      - -X github.com/DementorAK/photometa/internal/platform/version.Commit={{ .Commit }}
+      - -X github.com/DementorAK/photometa/internal/platform/version.Date={{ .Date }}
+
 archives:
-  - id: default
+  - ids:
+      - photometa-cli
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE
+  - ids:
+      - photometa-gui
     format_overrides:
       - goos: windows
         format: zip
@@ -46,4 +74,5 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
-      - '^ chore:'
+      - '^chore:'
+      - '^ci:'
