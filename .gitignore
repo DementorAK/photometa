@@ -1,5 +1,5 @@
 # Binaries (Windows calls them .exe, Linux/Mac has no extension)
-photometa
+/photometa
 *.exe
 *.exe~
 *.dll
