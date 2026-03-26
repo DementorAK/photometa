@@ -45,7 +45,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
-          lfs: true
+          lfs: false
           fetch-depth: 0
 
       - name: Set up Go
@@ -71,7 +71,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
-          lfs: true
+          lfs: false
           fetch-depth: 0
 
       - name: Set up Go
