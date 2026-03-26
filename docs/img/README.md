@@ -41,26 +41,6 @@ When using these images, you must provide attribution as required by the specifi
 
 ---
 
-### sample_jpg_3.jpg
-
-| Property | Value |
-|----------|-------|
-| **Author** | [Steve Walser](https://www.flickr.com/photos/bassbro/) |
-| **Source** | [Flickr](https://flic.kr/p/2nWa53y) |
-| **License** | CC BY-NC-ND 2.0 |
-
----
-
-### sample_jpg_4.jpg
-
-| Property | Value |
-|----------|-------|
-| **Author** | [Steve Walser](https://www.flickr.com/photos/bassbro/) |
-| **Source** | [Flickr](https://flic.kr/p/2nWvUCc) |
-| **License** | CC BY-NC-ND 2.0 |
-
----
-
 ### sample_png_1.png
 
 | Property | Value |
@@ -117,7 +97,8 @@ These images are used by:
 
 | Sample File | License Type | Commercial Use | Derivatives | Attribution |
 |-------------|--------------|----------------|-------------|-------------|
-| `sample_jpg_*.jpg` | CC BY-NC-ND 2.0 | ❌ No | ❌ No | ✅ Yes |
+| `sample_jpg_1.jpg` | CC BY-NC-ND 2.0 | ❌ No | ❌ No | ✅ Yes |
+| `sample_jpg_2.jpg` | CC BY-NC-ND 2.0 | ❌ No | ❌ No | ✅ Yes |
 | `sample_png_1.png` | CC BY 4.0 | ✅ Yes | ✅ Yes | ✅ Yes |
 | `sample_png_2.png` | CC BY-SA 4.0 | ✅ Yes | 🔄 ShareAlike | ✅ Yes |
 | `sample_tiff.tif` | Public Domain | ✅ Yes | ✅ Yes | ❌ Optional |
