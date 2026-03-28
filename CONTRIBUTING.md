@@ -8,7 +8,6 @@ Before you start, ensure you have the following installed:
 
 *   **Go** (version 1.21 or higher)
 *   **Git**
-*   **Git LFS** (Required for test images ~200MB) - See [Installation](https://git-lfs.github.io/)
 *   **GCC** (Required for Fyne GUI) - See [Fyne Prerequisites](https://developer.fyne.io/started/)
 *   **golangci-lint** (Required for linting):
     ```bash
@@ -27,12 +26,7 @@ Before you start, ensure you have the following installed:
     git clone https://github.com/your-username/photometa.git
     cd photometa
     ```
-3.  **Download test images** (stored via Git LFS):
-    ```bash
-    git lfs install
-    git lfs pull
-    ```
-4.  **Create a branch** for your feature or bug fix:
+3.  **Create a branch** for your feature or bug fix:
     ```bash
     git checkout -b feature/my-new-feature
     ```
@@ -40,13 +34,17 @@ Before you start, ensure you have the following installed:
 ## 🏗 Build and Run
 
 ### CLI & Server
+
 The standard build does not require CGO unless specialized libraries are added.
+
 ```bash
 go build ./cmd/photometa
 ```
 
 ### GUI
+
 The GUI mode requires CGO and the Fyne toolkit dependencies.
+
 ```bash
 go build -tags gui ./cmd/photometa
 ```
@@ -67,6 +65,12 @@ go test ./...
 go test -race ./...
 ```
 
+### Testing Infrastructure
+
+*   `internal/fake/` — Contains test doubles (e.g., `FakeLogger`) that implement interfaces from `internal/port`. Use these in your unit tests to avoid external dependencies.
+*   `integration/` — Contains tests that verify interactions between multiple layers (e.g., Analyzer → Format parsers → Domain models). Run with `go test ./integration/...`.
+*   `integration/testdata/` — Sample images used for integration testing.
+
 ## 🔎 Check Code Style & Linting
 
 We follow standard Go coding conventions. Please ensure your code is formatted correctly.
@@ -82,13 +86,42 @@ go vet ./...
 golangci-lint run ./...
 ```
 
+## 📖 Go Documentation
+
+This project uses standard Go documentation tools:
+
+```bash
+# View package documentation
+go doc ./internal/domain
+
+# Run local documentation server (godoc)
+godoc -http=:8080
+
+# Run local documentation server (modern pkgsite)
+pkgsite -http=:8080
+```
+
+### Example Tests
+
+The project includes example tests (`*_test.go` with `Example` functions) that serve as both documentation and verification of public APIs. Run them with:
+
+```bash
+go test -v -run Example
+```
+
+These tests are automatically included in standard `go test` runs.
+
 ## 📐 Project Structure
 
 This project follows the **Hexagonal Architecture (Ports and Adapters)** pattern:
 
 | Directory | Purpose |
 |-----------|---------|
+| `.github/` | CI/CD workflows |
+| `.vscode/launch.json` | VS Code debug/launch configurations |
 | `cmd/photometa` | Application entry point (Composition Root) |
+| `docs/` | Documentation |
+| `integration/` | Integration tests (cross-layer testing) |
 | `internal/adapter` | Driving adapters (CLI, GUI, HTTP Server) |
 | `internal/analyzer` | Application service layer with metadata filler |
 | `internal/domain` | Domain models (ImageFile, Metadata, etc.) |
@@ -96,10 +129,12 @@ This project follows the **Hexagonal Architecture (Ports and Adapters)** pattern
 | `internal/format` | EXIF, IPTC, XMP parsers and format detection |
 | `internal/platform` | Infrastructure (logger, locale, assets, version) |
 | `internal/port` | Interface definitions (ImageAnalyzer, Logger) |
-| `integration/` | Integration tests (cross-layer testing) |
-| `docs/img/` | Sample images used for integration testing |
+| `.golangci.yml` | Linter configuration |
+| `.goreleaser.yml` | Release automation |
 
-### Versioning
+Please respect this separation of concerns when adding new features.
+
+## 🏷️ Versioning
 
 The project uses **Semantic Versioning (SemVer)**. Version information is injected at build time via ldflags.
 
@@ -110,6 +145,7 @@ The project uses **Semantic Versioning (SemVer)**. Version information is inject
 | `version.Date` | Build timestamp | `2026-03-20` |
 
 **Build with version:**
+
 ```bash
 go build -ldflags="-X github.com/DementorAK/photometa/internal/platform/version.Version=1.2.3 \
   -X github.com/DementorAK/photometa/internal/platform/version.Commit=$(git rev-parse --short HEAD) \
@@ -117,18 +153,11 @@ go build -ldflags="-X github.com/DementorAK/photometa/internal/platform/version.
 ```
 
 **CLI usage:**
+
 ```bash
 ./photometa version          # Human-readable output
 ./photometa version --json   # JSON for CI/CD scripts
 ```
-
-### Testing Infrastructure
-
-*   `internal/fake/` — Contains test doubles (e.g., `FakeLogger`) that implement interfaces from `internal/port`. Use these in your unit tests to avoid external dependencies.
-*   `integration/` — Contains tests that verify interactions between multiple layers (e.g., Analyzer → Format parsers → Domain models). Run with `go test ./integration/...`.
-*   `docs/img/` — Sample images used for integration testing. Images are stored via Git LFS due to size (~100MB). Run `git lfs pull` after cloning to download them.
-
-Please respect this separation of concerns when adding new features.
 
 ## 📝 Pull Request Process
 

@@ -1,7 +1,5 @@
 # Photo Metadata Viewer (PhotoMeta)
 
-![Project logo](docs/img/photometa_logo.jpg)
-
 Project supports multiple run modes:
 
 * **CLI Mode**: Analyze a single file or directory.
@@ -121,24 +119,39 @@ Detailed documentation is available in the `docs/` directory:
 *   **[GUI Manual](docs/gui_manual.md)**: How to use the graphical interface.
 *   **[API Reference](docs/api.md)**: HTTP Server API documentation.
 *   **[Architecture Overview](docs/architecture.md)**: Internal design and structure of the project.
-*   **[Test Images](docs/img/README.md)**: Sample images used for testing metadata extraction.
+*   **[Test Images](integration/testdata/README.md)**: Sample images used for testing metadata extraction.
 
 ## 📂 Project Structure
 
-This project follows the **Hexagonal Architecture** pattern:
+This project follows the **Hexagonal Architecture** (Ports and Adapters) pattern.
 
-| Component | Description |
-|-----------|-------------|
-| `cmd/photometa` | Application entry point |
-| `internal/adapter` | CLI, GUI, HTTP Server adapters |
-| `internal/analyzer` | Core application service |
-| `internal/domain` | Domain models and business entities |
-| `internal/format` | EXIF, IPTC, XMP metadata parsers |
-| `internal/platform` | Logger, locale, and assets |
-| `internal/port` | Interface definitions |
-| `internal/fake` | Test doubles |
-| `integration` | Integration tests |
-| `docs` | Documentation |
+#### 🏗️ Architecture
+
+| Layer | Path | Description |
+|-----------|-----------|-------------|
+| **Core** | `internal/domain` | Domain models and business entities (Entities) |
+| **Logic** | `internal/analyzer` | Core application logic and use cases (Services) |
+| **Ports** | `internal/port` | Interfaces defining how the core interacts with the world |
+| **Adapters** | `internal/adapter` | Implementations of CLI, GUI, and HTTP Server |
+| **Support** | `internal/format` | Technical metadata parsers (EXIF, XMP, IPTC) |
+| **Support** | `internal/platform` | Infrastructure code like logger and locale |
+
+#### 🛠️ Project Tooling
+
+*   `.github/` — CI/CD workflows and automation.
+*   `integration/` — Cross-layer integration tests and `testdata/`.
+*   `cmd/` — Application entry points (main packages).
+*   `docs/` — Project documentation and branding assets.
+*   `.golangci.yml` & `.goreleaser.yml` — Code quality and release manifests.
+
+## 🚀 Releases
+
+Pre-built binaries are available on the [Releases](https://github.com/DementorAK/photometa/releases) page:
+
+| Type | Platforms | Architectures |
+|------|-----------|---------------|
+| **CLI** | Windows, macOS, Linux | amd64, arm64 |
+| **GUI** | Windows, Linux | amd64 |
 
 ## Author
 

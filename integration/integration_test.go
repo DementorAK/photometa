@@ -29,10 +29,7 @@ func TestIntegration_AnalyzeDirectory(t *testing.T) {
 	service := analyzer.NewService(logger)
 
 	cwd, _ := os.Getwd()
-	imgDir := filepath.Join(cwd, "..", "docs", "img")
-	if _, err := os.Stat(imgDir); os.IsNotExist(err) {
-		imgDir = filepath.Join(cwd, "docs", "img")
-	}
+	imgDir := filepath.Join(cwd, "testdata")
 
 	if _, err := os.Stat(imgDir); os.IsNotExist(err) {
 		t.Skipf("Skipping integration test: image directory not found at %s", imgDir)
@@ -48,28 +45,15 @@ func TestIntegration_AnalyzeDirectory(t *testing.T) {
 		t.Fatal("Expected at least one image in directory scan, got zero")
 	}
 
-	var foundLogo, foundREADME bool
+	var foundREADME bool
 	for _, res := range results {
 		if res.Name == "README.md" {
 			foundREADME = true
-		}
-		if res.Name == "photometa_logo.jpg" {
-			foundLogo = true
-			// Logo should have NO EXIF, IPTC, or XMP tags
-			for _, tag := range res.Metadata.Tags {
-				if tag.Type == "EXIF" || tag.Type == "IPTC" || tag.Type == "XMP" {
-					t.Errorf("Found unexpected meta-tag %q of type %q in photometa_logo.jpg", tag.Name, tag.Type)
-				}
-			}
 		}
 	}
 
 	if foundREADME {
 		t.Error("Scan results should NOT contain README.md")
-	}
-
-	if !foundLogo {
-		t.Error("Scan results should contain photometa_logo.jpg")
 	}
 
 	t.Logf("Directory scan successful. Found %d images.", len(results))
@@ -80,10 +64,7 @@ func TestIntegration_AllSamplesHaveMetadata(t *testing.T) {
 	service := analyzer.NewService(logger)
 
 	cwd, _ := os.Getwd()
-	imgDir := filepath.Join(cwd, "..", "docs", "img")
-	if _, err := os.Stat(imgDir); os.IsNotExist(err) {
-		imgDir = filepath.Join(cwd, "docs", "img")
-	}
+	imgDir := filepath.Join(cwd, "testdata")
 
 	if _, err := os.Stat(imgDir); os.IsNotExist(err) {
 		t.Skipf("Skipping integration test: image directory not found at %s", imgDir)
@@ -96,8 +77,7 @@ func TestIntegration_AllSamplesHaveMetadata(t *testing.T) {
 	}
 
 	excludedFiles := map[string]bool{
-		"README.md":          true,
-		"photometa_logo.jpg": true,
+		"README.md": true,
 	}
 
 	for _, res := range results {
@@ -116,10 +96,7 @@ func TestIntegration_SampleJPG1HasAllMetadataTypes(t *testing.T) {
 	service := analyzer.NewService(logger)
 
 	cwd, _ := os.Getwd()
-	jpegPath := filepath.Join(cwd, "..", "docs", "img", "sample_jpg_1.jpg")
-	if _, err := os.Stat(jpegPath); os.IsNotExist(err) {
-		jpegPath = filepath.Join(cwd, "docs", "img", "sample_jpg_1.jpg")
-	}
+	jpegPath := filepath.Join(cwd, "testdata", "sample_jpg_1.jpg")
 
 	if _, err := os.Stat(jpegPath); os.IsNotExist(err) {
 		t.Skipf("Skipping integration test: sample_jpg_1.jpg not found at %s", jpegPath)
@@ -157,10 +134,7 @@ func TestIntegration_AnalyzeWebP(t *testing.T) {
 	service := analyzer.NewService(logger)
 
 	cwd, _ := os.Getwd()
-	webpPath := filepath.Join(cwd, "..", "docs", "img", "sample_webp.webp")
-	if _, err := os.Stat(webpPath); os.IsNotExist(err) {
-		webpPath = filepath.Join(cwd, "docs", "img", "sample_webp.webp")
-	}
+	webpPath := filepath.Join(cwd, "testdata", "sample_webp.webp")
 
 	if _, err := os.Stat(webpPath); os.IsNotExist(err) {
 		t.Skipf("Skipping integration test: webp image not found at %s", webpPath)
