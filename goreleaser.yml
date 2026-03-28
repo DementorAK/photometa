@@ -30,35 +30,35 @@ builds:
     binary: photometa_gui
     env:
       - CGO_ENABLED=1
+      - "CC={{ if eq .Os \"windows\" }}x86_64-w64-mingw32-gcc{{ else }}gcc{{ end }}"
     goos:
       - linux
       - windows
     goarch:
       - amd64
-      - arm64
-    tags:
-      - gui
+    flags:
+      - -tags=gui
     ldflags:
       - -s -w
+      - "{{ if eq .Os \"windows\" }}-H=windowsgui{{ end }}"
       - -X github.com/DementorAK/photometa/internal/platform/version.Version={{ .Version }}
       - -X github.com/DementorAK/photometa/internal/platform/version.Commit={{ .Commit }}
       - -X github.com/DementorAK/photometa/internal/platform/version.Date={{ .Date }}
 
 archives:
-  - id: cli-archive
+  - id: cli
     ids:
       - photometa-cli
-    format: tar.gz
     format_overrides:
       - goos: windows
         format: zip
     files:
       - README.md
       - LICENSE
-  - id: gui-archive
+  - id: gui
     ids:
       - photometa-gui
-    format: tar.gz
+    name_template: "{{ .ProjectName }}_gui_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
         format: zip
